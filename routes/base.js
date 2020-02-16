@@ -1,6 +1,8 @@
 let express = require('express');
 let router = express.Router();
 
+let dbFunctions = require('../drivers/dbFunctions');
+
 router.route('/')
 	.get(function (req, res) {
 		res.render('index');
@@ -18,14 +20,17 @@ router.route('/login')
 			res.render('login', { error: "You need to enter a username and password."});
 		}
 
-		verifyCredentials(username, password, function(err, verified) {
+		dbFunctions.verifyCredentials(username, password, function(err, verified) {
 			if (err) {
 				res.render('login', { error: err});
 				return;
 			}
 			
-			getUserUniversity(username, function(err, university) {
-				app.session.domain = university;
+			req.app.session.username = username;
+			
+			dbFunctions.getUserUniversity(username, function(err, result) {
+				req.app.session.domain = result[0].domain;
+				req.app.session.university = result[0].name;
 				res.redirect('/' + university);
 			})
 		})
