@@ -235,6 +235,8 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 							VALUES ("${professor}");
 						`, function(err, result){
 							if(err) throw err;
+
+							console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
 							connection.query(`
 								INSERT INTO Classes(courseid, section, startTime, days, roomid, professorid)
 								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${section}" AND number="${courseNumber}") as courseid,
@@ -243,7 +245,10 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 								${days} as days,
 								(SELECT roomid FROM Rooms LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid WHERE name="${building}" AND number="${roomNumber}" ) AS roomid,
 								(SELECT professorid FROM Professors WHERE name = "${professor}") AS professorid;
-							`)
+							`, function(err, result){
+								if(err) throw err;
+
+							})
 						})
 					})
 				})
@@ -289,6 +294,6 @@ isUniversityNew('cuny.edu', function(err, result){
 })
 
 //addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
-addChat('111', 'CSCI', null, 40, '207', 'Science Building', 'Kenneth Lord', 'http://whatsapp.com/chat/7832y324', 'cuny.edu', function(err, result){
+addChat('111', 'CSCI', null, 40, '207', 'Science Building', 'Jerry Waxman', 'http://whatsapp.com/chat/7832y324', 'cuny.edu', function(err, result){
 	console.log(result)
 })
