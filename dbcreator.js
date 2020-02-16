@@ -20,7 +20,7 @@ function createDB(domain){
 		`,  function(err, result){
 				if (err) throw err;
 				connection.query(`
-				    CREATE TABLE IF NOT EXISTS Subject (
+				    CREATE TABLE IF NOT EXISTS Subjects (
 				    	subjectid int NOT NULL AUTO_INCREMENT,
 				    	name VARCHAR(255) NOT NULL,
 				    	PRIMARY KEY (subjectid)
@@ -28,17 +28,17 @@ function createDB(domain){
 				`, function(err, result){
 					if (err) throw err;
 					connection.query(`
-					    CREATE TABLE IF NOT EXISTS Course (
+					    CREATE TABLE IF NOT EXISTS Courses (
 					    	courseid int NOT NULL AUTO_INCREMENT,
 					    	subjectid int NOT NULL,
 					    	number VARCHAR(255) NOT NULL,
 					    	PRIMARY KEY (courseid),
-					    	FOREIGN KEY (subjectid) REFERENCES Subject (subjectid)
+					    	FOREIGN KEY (subjectid) REFERENCES Subjects (subjectid)
 					    );
 					`, function(err, result){
 						if (err) throw err;
 						connection.query(`
-						    CREATE TABLE IF NOT EXISTS Building (
+						    CREATE TABLE IF NOT EXISTS Buildings (
 						    	buildingid int NOT NULL AUTO_INCREMENT,
 						    	name VARCHAR(255),
 						    	PRIMARY KEY (buildingid)
@@ -46,21 +46,21 @@ function createDB(domain){
 						`, function(err, result){
 							if (err) throw err;
 							connection.query(`
-							    CREATE TABLE IF NOT EXISTS Room (
+							    CREATE TABLE IF NOT EXISTS Rooms (
 							    	roomid int NOT NULL AUTO_INCREMENT,
 							    	number VARCHAR(255) NOT NULL,
 							    	buildingid int NOT NULL,
 							    	coordinates Point,
 							    	PRIMARY KEY (roomid),
-							    	FOREIGN KEY (buildingid) REFERENCES Building (buildingid)
+							    	FOREIGN KEY (buildingid) REFERENCES Buildings (buildingid)
 
 							    );
 							`, function(err, result){
 								if(err) throw err;
 								connection.query(`
-								    CREATE TABLE IF NOT EXISTS Service (
+								    CREATE TABLE IF NOT EXISTS Services (
 								    	serviceid int NOT NULL AUTO_INCREMENT,
-								    	name VARCHAR(255) NOT NULL,
+								    	name VARCHAR(255) NOT NULL UNIQUE,
 								    	PRIMARY KEY (serviceid)
 								    );		
 								`, function(err, result){
@@ -71,13 +71,13 @@ function createDB(domain){
 									    	userid int NOT NULL,
 									    	link VARCHAR(255) NOT NULL,
 									    	serviceid int,
-									    	FOREIGN KEY (serviceid) REFERENCES Service (serviceid),
+									    	FOREIGN KEY (serviceid) REFERENCES Services (serviceid),
 									    	FOREIGN KEY (userid) REFERENCES Directory.Users(userid)
 									    );				
 									`, function(err, result){
 										if(err) throw err;
 										connection.query(`
-										    CREATE TABLE IF NOT EXISTS Professor (
+										    CREATE TABLE IF NOT EXISTS Professors (
 										    	professorid int NOT NULL AUTO_INCREMENT,
 										    	name VARCHAR(255) NOT NULL,
 										    	PRIMARY KEY (professorid)
@@ -85,7 +85,7 @@ function createDB(domain){
 										`, function(err, result){
 											if(err) throw err;
 											connection.query(`
-												CREATE TABLE IF NOT EXISTS Class (
+												CREATE TABLE IF NOT EXISTS Classes (
 											    	classid int NOT NULL AUTO_INCREMENT,
 											    	courseid int NOT NULL,
 											    	section VARCHAR(255),
@@ -94,13 +94,24 @@ function createDB(domain){
 											    	roomid int,
 											    	professorid int NOT NULL,
 											    	PRIMARY KEY (classid),
-											    	FOREIGN KEY (courseid) REFERENCES Course(courseid),
-											    	FOREIGN KEY (roomid) REFERENCES Room(roomid),
-											    	FOREIGN KEY (professorid) REFERENCES Professor(professorid)
+											    	FOREIGN KEY (courseid) REFERENCES Courses(courseid),
+											    	FOREIGN KEY (roomid) REFERENCES Rooms(roomid),
+											    	FOREIGN KEY (professorid) REFERENCES Professors(professorid)
 										    	);
 											`, function(err, result){
 												if(err) throw err;
-												console.log('all done!')
+												connection.query(`INSERT INTO Services(name)
+													VALUES 
+													("whatsapp"), 
+													("telegram"), 
+													("groupme"), 
+													("signal"),
+													("messenger"),
+													("wechat");
+												`, function(err, result){
+													if(err) throw err;
+													console.log('complete!')
+												})
 											})
 										})
 									})

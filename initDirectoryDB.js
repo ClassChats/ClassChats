@@ -18,7 +18,7 @@ function createDB(){
 		`, function(err, result){
 			if (err) throw err;
 			connection.query(`		
-				CREATE TABLE IF NOT EXISTS School (
+				CREATE TABLE IF NOT EXISTS Schools (
 					schoolid int NOT NULL AUTO_INCREMENT,
 					name VARCHAR(255) NOT NULL,
 					domain VARCHAR(255) NOT NULL,
@@ -35,7 +35,7 @@ function createDB(){
 						verified bit NOT NULL DEFAULT 0,
 						verifyHash VARCHAR(255),
 						PRIMARY KEY (userid),
-						FOREIGN KEY (schoolid) REFERENCES School(schoolid)
+						FOREIGN KEY (schoolid) REFERENCES Schools(schoolid)
 					);
 				`, function(err, result){
 					if(err) throw err;
@@ -45,3 +45,5 @@ function createDB(){
 		});
 	});
 }
+
+createDB();
