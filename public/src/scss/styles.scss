@@ -162,3 +162,12 @@ input {
         width: fit-content;
     }
 }
+
+.error {
+    background: #ff3e3e;
+    border: 3px solid #ce0000;
+    border-radius: 4px;
+    color: white;
+    font-weight: 700;
+    padding: 10px;
+}

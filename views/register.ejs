@@ -1,23 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    
-    <link href="/site/assets/css/styles.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <a href="/:university">
-            <div class="logo">
-                <img src="/site/assets/images/ClassChats Logo Words.png">
-                <!-- <h3 style="float: left;">ClassChats</h3> -->
-            </div>
-        </a>
-        <span><a href="/">Log Out</a></span>
-        <!-- <a href="/signup">Sign Up</a> or <a href="/login">Log In</a> -->
-    </header>
+<% title = 'Sign Up' %>
+<%- include('partials/top.ejs') %>
     <main>
         <div class="title">
             <h1>Sign Up</h1>
@@ -25,6 +7,9 @@
         </div>
         
         <div class="central-box">
+            <% if (locals.error !== undefined) { %>
+                <div class="error"><%= error %></div>
+            <% } %>
             <input id="username" name="username" type="email" placeholder="Username">
             <input id="password" name="password" type="password" placeholder="Password">
             <input id="password-confirm" name="password-confirm" type="password" placeholder="Confirm Password">
