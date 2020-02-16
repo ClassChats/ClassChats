@@ -22,7 +22,7 @@ function createDB(domain){
 				connection.query(`
 				    CREATE TABLE IF NOT EXISTS Subjects (
 				    	subjectid int NOT NULL AUTO_INCREMENT,
-				    	name VARCHAR(255) NOT NULL,
+				    	name VARCHAR(255) NOT NULL UNIQUE,
 				    	PRIMARY KEY (subjectid)
 				    );
 				`, function(err, result){
@@ -33,7 +33,8 @@ function createDB(domain){
 					    	subjectid int NOT NULL,
 					    	number VARCHAR(255) NOT NULL,
 					    	PRIMARY KEY (courseid),
-					    	FOREIGN KEY (subjectid) REFERENCES Subjects (subjectid)
+					    	FOREIGN KEY (subjectid) REFERENCES Subjects (subjectid),
+					    	CONSTRAINT COURSES_UC UNIQUE (subjectid, number)
 					    );
 					`, function(err, result){
 						if (err) throw err;
@@ -52,8 +53,8 @@ function createDB(domain){
 							    	buildingid int NOT NULL,
 							    	coordinates Point,
 							    	PRIMARY KEY (roomid),
-							    	FOREIGN KEY (buildingid) REFERENCES Buildings (buildingid)
-
+							    	FOREIGN KEY (buildingid) REFERENCES Buildings (buildingid),
+							    	CONSTRAINT ROOM_UC UNIQUE(buildingid, number)
 							    );
 							`, function(err, result){
 								if(err) throw err;
@@ -79,7 +80,7 @@ function createDB(domain){
 										connection.query(`
 										    CREATE TABLE IF NOT EXISTS Professors (
 										    	professorid int NOT NULL AUTO_INCREMENT,
-										    	name VARCHAR(255) NOT NULL,
+										    	name VARCHAR(255) NOT NULL UNIQUE,
 										    	PRIMARY KEY (professorid)
 										    )
 										`, function(err, result){
