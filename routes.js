@@ -79,9 +79,10 @@ app.route('/:university/search')
 	res.render('courseSearch.html');
 	})
 	.post(function (req, res)) {
-	let department = req.body.departmentName;
+	let domain = res.locals.domain;
+	let subject = req.body.subjectName;
 	let courseNumber = req.body.courseNumber;
-	getSearchResults(department, courseNumber)
+	getChatsForCourse(domain, subject, courseNumber)
 	res.render('searchResults.html', {department: department, courseNumber : courseNumber})
 }
 app.route('/:university/AddChat')
