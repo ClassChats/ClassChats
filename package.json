@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/JHACKS2020Winners/ClassChats#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0"
   }
 }
