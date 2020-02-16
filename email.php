@@ -1,11 +1,12 @@
 <?php
 require_once "Mail.php";
 
-$from = '<classhacksjh@gmail.com>';
-$email = $argv[0];
-$to = '<'.$email.'>';
+$from = 'classhacksjh@gmail.com';
+$email = $argv[1];
+echo $email;
+$to = $email;
 $subject = '"Classchats- Please verify"';
-$vcode = $argv[1];
+$vcode = $argv[2];
 $body = "Welcome to Classchats!! We need you to veryify your account. Please click the link below and enter the verification code: <b>".$vcode."</b>";
 
 $headers = array(
@@ -15,8 +16,8 @@ $headers = array(
 );
 
 $smtp = Mail::factory('smtp', array(
-        'host' => 'ssl://smtp.gmail.com',
-        'port' => '465',
+        'host' => 'smtp.gmail.com',
+        'port' => '25',
         'auth' => true,
         'username' => 'classhacksjh@gmail.com',
         'password' => 'Password123#'
