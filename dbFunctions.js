@@ -255,7 +255,7 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 
 							//console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
 							connection.query(`
-								INSERT INTO Classes(courseid, section, startTime, days, roomid, professorid)
+								INSERT IGNORE INTO Classes(courseid, section, startTime, days, roomid, professorid)
 								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${subject}" AND number="${courseNumber}") as courseid,
 								"${section}" as section,
 								${startTime} as startTime,
@@ -285,7 +285,9 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 									(SELECT userid FROM Directory.Users WHERE email="${username}"),
 									"${link}",
 									(SELECT serviceid FROM Services WHERE name="${serviceName}") 
-								`)
+								`, function(err, result){
+									if(err) throw err;
+								})
 							})
 						})
 					})
@@ -306,6 +308,7 @@ getChatsForCourse("CSCI", "111", function(err, result) {
 })
 */
 
+/*
 getChatsForCourse('cuny.edu', 'csci', '111', function(err, result){
 	console.log('getChatsForCourse '+result)
 })
@@ -334,6 +337,8 @@ isUniversityNew('cuny.edu', function(err, result){
 })
 
 //addChat(subject, courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
-addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://chat.whatsapp.com/ckce7832y324', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
+addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://t.me/jdhdwbch', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
 	console.log(result)
 })
+
+*/
