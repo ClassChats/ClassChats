@@ -1,0 +1,19 @@
+{
+  "name": "classchats",
+  "version": "1.0.0",
+  "description": "YOU KNOW WHAT IT IS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JHACKS2020Winners/ClassChats.git"
+  },
+  "author": "JHACKS2020Winners",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JHACKS2020Winners/ClassChats/issues"
+  },
+  "homepage": "https://github.com/JHACKS2020Winners/ClassChats#readme"
+}
