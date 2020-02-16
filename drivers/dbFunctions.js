@@ -11,6 +11,61 @@ function bsToDays(bitstring){
 	return days.substring(0, days.length-1);
 }
 
+function getChatsForUniversity(domain, callback){
+
+	var mysql      = require('mysql');
+	var connection = mysql.createConnection({
+	  host     : 'localhost',
+	  user     : 'dbuser',
+	  password : 'password',
+	});
+
+	connection.connect();
+
+	// do the query
+	// in the callback:
+	// function(err, result)
+	domain = domain.replace('.', '_')
+	connection.query(`
+		USE ${domain};
+	`, function(err, result){
+		if (err) throw err;
+		connection.query(`
+			SELECT Subjects.name as subjectName,
+			Courses.number as courseNumber,
+			LPAD(CONV(Classes.days, 10, 2),7,'0') as daysOfWeek,
+			Rooms.number as roomNumber,
+			Buildings.name as buildingName,
+			Classes.section AS section,
+			Professors.name AS professorName,
+			Services.name as serviceName,
+			Chats.link as link,
+			Classes.startTime AS startTime,
+			Rooms.coordinates AS coordinates
+
+
+			FROM Classes
+			LEFT JOIN Courses ON
+			Classes.courseid = Courses.courseid 
+			LEFT JOIN Subjects ON
+			Courses.subjectid = Subjects.subjectid
+			LEFT JOIN Professors ON
+			Classes.professorid = Professors.professorid
+			LEFT JOIN Rooms ON Classes.roomid = Rooms.roomid
+			LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid
+			LEFT JOIN Chats ON Classes.classid = Chats.classid
+			LEFT JOIN Services ON Chats.serviceid = Services.serviceid
+		`,function(err, result){
+			if(err) throw err;
+			for(var i = 0; i < result.length; i++){
+				result[i].daysOfWeek =bsToDays(result[i].daysOfWeek);
+			}
+			callback(null, result);
+		})
+
+	})
+}
+
 function getChatsForCourse(domain, subject, number, callback){
 	var mysql      = require('mysql');
 	var connection = mysql.createConnection({
@@ -400,12 +455,12 @@ isUniversityNew('cuny.edu', function(err, result){
 // getChatsForCourse('cuny.edu', 'csci', '320', function(err, result){
 // 	console.log(result)
 // })
-
+/*
 getChatsForCourse('cuny.edu','CSCI','320', function(err, result){
 	if(err) throw err;
 	console.log(result)
 })
-
+*/
 
 module.exports = {
 	getChatsForCourse,
