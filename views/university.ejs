@@ -7,88 +7,20 @@
         </div>
         <div class="section">
             <div class="top">
-                <h3>Science Building B-141</h3>
+                <h3>Courses</h3>
             </div>
             <table class="chat-list">
+                <% for (let i = 0; i < locals.result.length; i++) { let res = result[i]; %> 
                 <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
+                    <td><%= res.serviceName %></td>
+                    <td><%= res.subjectName + ' ' + res.courseNumber %></td>
+                    <td><%= res.professorName %></td>
+                    <td>Section <%= res.section %> (<%= res.daysOfWeek + ' ' + res.startTime %>)</td>
                     <td>
-                        <div class="button">Join</div>
+                        <a href="<%= res.link %>"><div class="button">Join</div></a>
                     </td>
                 </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="section">
-            <div class="top">
-                <h3>Science Building B-141</h3>
-            </div>
-            <table class="chat-list">
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>CSCI 111</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (9:45am)</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
+                <% } %>
             </table>
         </div>
     </main>

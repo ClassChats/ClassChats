@@ -8,10 +8,14 @@ const port = 3000;
 app.use(express.static('public'));
 // Properly handle JSON
 app.use(express.json());
+// Properly handle URL-encoded
+app.use(express.urlencoded({
+    extended: false,
+}));
 // Set up session management
 app.use(session({
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     secret: 'best hackathon team',
 }));
 // Set the view engine

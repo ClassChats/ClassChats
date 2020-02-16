@@ -2,39 +2,40 @@
 <%- include('partials/top.ejs') %>
     <main>
         <div class="title">
-            <h1>Add a <%= locals.session.university %> (<%locals.sessions.domain%>) Chat</h1>  
+            <h1>Add a <%= locals.domain %> Chat</h1>  
         </div>
-        <div class="add-bar">
-            <input id="dept" placeholder="Department (full, e.g. CSCI)">
-            <input id="courseNumber" placeholder="Course Number">
-            <input id="professor" placeholder="Professor (full name)">
-            <input id="section" placeholder="Section">
+        <form class="add-bar" method="POST" action="">
+            <input name="dept" id="dept" placeholder="Department (full, e.g. CSCI)">
+            <input name="courseNumber" id="courseNumber" placeholder="Course Number">
+            <input name="professor" id="professor" placeholder="Professor (full name)">
+            <input name="section" id="section" placeholder="Section">
             <br>
             
-            <input id="startTime" placeholder="Start Time">
-            <input id="building" placeholder="Building">
-            <input id="room" placeholder="Room Number">
+            <input name="startTime" id="startTime" placeholder="Start Time">
+            <input name="building" id="building" placeholder="Building">
+            <input name="room" id="room" placeholder="Room Number">
             <br>
             
             <label>Days in session:</label>
-            <input type="checkbox" name="day" id="sunday" value="sunday">
+            <input type="checkbox" name="sunday" id="sunday" value="sunday">
             <label for="sunday">Sunday</label>
-            <input type="checkbox" name="day" id="monday" value="monday">
+            <input type="checkbox" name="monday" id="monday" value="monday">
             <label for="monday">Monday</label>
-            <input type="checkbox" name="day" id="tuesday" value="tuesday">
+            <input type="checkbox" name="tuesday" id="tuesday" value="tuesday">
             <label for="tuesday">Tuesday</label>
-            <input type="checkbox" name="day" id="wednesday" value="wednesday">
+            <input type="checkbox" name="wednesday" id="wednesday" value="wednesday">
             <label for="wednesday">Wednesday</label>
-            <input type="checkbox" name="day" id="thursday" value="thursday">
+            <input type="checkbox" name="thursday" id="thursday" value="thursday">
             <label for="thursday">Thursday</label>
-            <input type="checkbox" name="day" id="friday" value="friday">
+            <input type="checkbox" name="friday" id="friday" value="friday">
             <label for="friday">Friday</label>
-            <input type="checkbox" name="day" id="saturday" value="saturday">
+            <input type="checkbox" name="saturday" id="saturday" value="saturday">
             <label for="saturday">Saturday</label>
             <br>
+            <input name="gc-link" placeholder="Chat link">
             
-            <div class="button button--blue">Submit</div>
-        </div>
+            <button class="button button--blue">Submit</button>
+        </form>
     </main>
 </body>
 </html>

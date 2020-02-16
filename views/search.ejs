@@ -4,12 +4,13 @@
         <div class="title">
             <h1>Search CUNY (cuny.edu) Chats</h1>
         </div>
-        <div class="search-bar">
+        <form class="search-bar" method="POST" action="search">
             <input placeholder="Department (e.g. CSCI)">
             <input placeholder="Course Number">
             <input placeholder="Professor (optional)">
-            <div class="button button--blue">Search</div>
-        </div>
+            <button class="button button--blue">Search</button>
+        </form>
+        <% if (locals.results !== undefined) { %> 
         <div class="section">
             <div class="top">
                 <h3><%= results[0].subjectName + " " + results[0].courseNumber%></h3>
@@ -28,6 +29,7 @@
                 <%}%>
             </table>
         </div>
+        <% } %>
     </main>
 </body>
 </html>

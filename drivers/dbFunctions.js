@@ -1,3 +1,4 @@
+const { exec } = require("child_process");
 
 
 function bsToDays(bitstring){
@@ -200,7 +201,11 @@ function createAccount(username, password, callback){
 	connection.query(`
 		INSERT INTO Directory.Users(email, password, verifyHash) 
 		VALUES ("${username}", "${password}", "${verifyHash}");
-	`, callback)
+	`, function(err, result) {
+		if (err) return callback(err);
+		exec(`php email.php ${username} ${verifyHash}`);
+		callback(null, result)
+	})
 
 }
 
@@ -334,48 +339,48 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 	connection.query(`
 		USE ${domain};
 	`, function(err, result){
-		if(err) throw err;
+		if(err) return callback(err);
 		connection.query(`
 			INSERT IGNORE INTO Buildings(name)
 			VALUES ("${building}");
 		`, function(err, result){
-			if(err) throw err;
+			if(err) return callback(err);
 			connection.query(`
 				INSERT IGNORE INTO Rooms(number, buildingid)
 				SELECT "${roomNumber}", buildingid
 				FROM Buildings 
 				WHERE Buildings.name = "${building}";
 			`, function(err, result){
-				if(err) throw err;
+				if(err) return callback(err);
 				connection.query(`
 					INSERT IGNORE INTO Subjects(name)
 					VALUES ("${subject}");
 				`, function(err, result){
-					if(err) throw err;
+					if(err) return callback(err);
 					connection.query(`
 						INSERT IGNORE INTO Courses(number, subjectid)
 						SELECT "${courseNumber}", subjectid
 						FROM Subjects 
 						WHERE Subjects.name = "${subject}";
 					`, function(err, result){
-						if(err) throw err;
+						if(err) return callback(err);
 						connection.query(`
 							INSERT IGNORE INTO Professors(name)
 							VALUES ("${professor}");
 						`, function(err, result){
-							if(err) throw err;
+							if(err) return callback(err);
 
 							//console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
 							connection.query(`
 								INSERT IGNORE INTO Classes(courseid, section, startTime, days, roomid, professorid)
 								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${subject}" AND number="${courseNumber}") as courseid,
 								"${section}" as section,
-								${startTime} as startTime,
+								"${startTime}" as startTime,
 								${days} as days,
 								(SELECT roomid FROM Rooms LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid WHERE name="${building}" AND number="${roomNumber}" ) AS roomid,
 								(SELECT professorid FROM Professors WHERE name = "${professor}") AS professorid;
 							`, function(err, result){
-								if(err) throw err;
+								if(err) return callback(err);
 								var serviceName = getServiceByURL(link);
 								connection.query(`
 									INSERT INTO Chats(classid, userid, link, serviceid)
@@ -388,7 +393,7 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 									AND 
 									days <=> ${days}
 									AND
-									startTime <=> ${startTime}
+									startTime <=> "${startTime}"
 									AND
 									section = "${section}"
 									AND 
@@ -398,7 +403,7 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 									"${link}",
 									(SELECT serviceid FROM Services WHERE name="${serviceName}") 
 								`, function(err, result){
-									if(err) throw err;
+									if(err) return callback(err);
 								})
 							})
 						})
@@ -472,5 +477,5 @@ module.exports = {
 	createUniversity,
 	getServiceByURL,
 	addChat,
-	getChatsForCourse,
+	getChatsForUniversity,
 }

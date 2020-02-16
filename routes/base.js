@@ -26,14 +26,16 @@ router.route('/login')
 				return;
 			}
 			
-			req.app.session.username = username;
+			// req.session.save(function() {
+				req.session.username = username;
 			
-			dbFunctions.getUserUniversity(username, function(err, result) {
-				req.app.session.domain = result[0].domain;
-				req.app.session.university = result[0].name;
-				res.redirect('/' + university);
-			})
-		})
+				dbFunctions.getUserUniversity(username, function(err, result) {
+					req.session.domain = result[0].domain;
+					req.session.university = result[0].name;
+					res.redirect('/u/' + req.session.domain);
+				});
+			// });
+		});
 	});
 
 router.route('/signup')
@@ -46,17 +48,17 @@ router.route('/signup')
 		let passwordConfirm = req.body.passwordConfirm;
 		
 		if (username === undefined || password === undefined) {
-			res.render('signup', { error: "You need to enter a username and password."});
+			res.render('register', { error: "You need to enter a username and password."});
 			return;
 		}
 		if (password !== passwordConfirm) {
-			res.render('signup', { error: "'Password' and 'Confirm Password' must match."});
+			res.render('register', { error: "'Password' and 'Confirm Password' must match."});
 			return;
 		}
 		
-		createAccount(username, password, function(err, result) {
+		dbFunctions.createAccount(username, password, function(err, result) {
 			if (err) {
-				res.render('signup', { error: err});
+				res.render('register', { error: err});
 			} else {
 				res.redirect('/validate');
 			}
@@ -65,14 +67,16 @@ router.route('/signup')
 
 router.route('/validate')
 	.get(function (req, res) {
-		render('validate');
+		res.render('validate');
 	})
 	.post(function (req, res) {
 		let code = req.body.code;
-		verify(username, code, function(err, verified) {
+		dbFunctions.verify(req.session.username, code, function(err, verified) {
+			if (err) return res.send(err);
+			
 			let university = res.locals.domain;
-			app.session.university = university;
-			res.redirect('/' + university);
+			req.session.university = university;
+			res.redirect('/u/' + university);
 		});
 	});
 	

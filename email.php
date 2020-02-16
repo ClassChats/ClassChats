@@ -22,7 +22,7 @@ $smtp = Mail::factory('smtp', array(
         'port' => '25',
         'auth' => true,
         'username' => 'classhacksjh@gmail.com',
-        'password' => 'Password123#'
+        'password' => 'howdoesabastardorphansonofawhore'
     ));
 
 $mail = $smtp->send($to, $headers, $body);
