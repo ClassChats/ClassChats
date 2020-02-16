@@ -15,7 +15,7 @@ $headers = array(
 );
 
 $smtp = Mail::factory('smtp', array(
-        'host' => 'ssl://smtp.gmail.com',
+        'host' => 'smtp.gmail.com',
         'port' => '465',
         'auth' => true,
         'username' => 'classhacksjh@gmail.com',
