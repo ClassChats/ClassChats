@@ -12,45 +12,20 @@
         </div>
         <div class="section">
             <div class="top">
-                <h3>CSCI 111</h3>
+                <h3><%= results[0].subjectName + " " + results[0].courseNumber%></h3>
             </div>
             <table class="chat-list">
+                <% for (var i = 0; i < results.length; i++) {%>
                 <tr>
-                    <td>WA</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (Mon/Wed 9:45am)</td>
-                    <td>SB B-141</td>
+                    <td><%= results[i].serviceName%></td>
+                    <td><%= results[i].professorName%></td>
+                    <td><%= "Section " + results[i].section + " " + results[i].daysOfWeek + " " + results[i].startTime%></td>
+                    <td><%= results[i].buildingName + " " + results[i].roomNumber%></td>
                     <td>
-                        <div class="button">Join</div>
+                        <a href="<%= results[i].link%>"><div class="button">Join</div></a>
                     </td>
                 </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (Mon/Wed 9:45am)</td>
-                    <td>SB B-141</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (Mon/Wed 9:45am)</td>
-                    <td>SB B-141</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>WA</td>
-                    <td>Lawrence Teitelman</td>
-                    <td>Section 3 (Mon/Wed 9:45am)</td>
-                    <td>SB B-141</td>
-                    <td>
-                        <div class="button">Join</div>
-                    </td>
-                </tr>
+                <%}%>
             </table>
         </div>
     </main>
