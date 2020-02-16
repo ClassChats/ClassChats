@@ -49,3 +49,6 @@ router.route('/:university/:subject/:courseNumber')
 	.get(function (req, res) {
 		res.render('courseChats.html');
 	});
+
+
+module.exports = router;

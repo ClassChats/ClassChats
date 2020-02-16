@@ -8,7 +8,7 @@ router.route('/')
 
 router.route('/login')
 	.get(function (req, res) {
-		res.render('loginPage.html');
+		res.render('login');
 	})
 	.post(function (req, res) {
 		let username = req.body.username;
@@ -70,3 +70,5 @@ router.route('/verify')
 			res.redirect('/' + university);
 		});
 	});
+	
+module.exports = router;

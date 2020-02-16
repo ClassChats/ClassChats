@@ -17,4 +17,6 @@ router.route('/universities/:domain')
         });
 	});
 
-app.route('/universities/:domain/chats/:chatId');
+router.route('/universities/:domain/chats/:chatId');
+
+module.exports = router;
