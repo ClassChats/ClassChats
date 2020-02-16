@@ -1,0 +1,16 @@
+<% title = 'Validation Required' %>
+<%- include('partials/top.ejs') %>
+    <main>
+        <div class="title">
+            <h1>Check your email for a validation code.</h1>
+            <span>You need to complete this process before you can browse the chats.</span>
+        </div>
+        
+        <img class="empty-state" src="/site/assets/images/undraw_mail_box_kd5i.svg">
+        <div class="invisible-form">
+            <input class="input--code" id="code" name="code" placeholder="Code" maxlength="6">
+            <div class="button">Submit</div>
+        </div>
+    </main>
+</body>
+</html>

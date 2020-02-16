@@ -110,7 +110,7 @@ function createAccount(username, password, callback){
 
 }
 
-function isCorrect(username, vCode, callback){
+function verify(username, vCode, callback){
 	var mysql      = require('mysql');
 	var connection = mysql.createConnection({
 	  host     : 'localhost',
@@ -125,27 +125,52 @@ function isCorrect(username, vCode, callback){
 		FROM Directory.Users 
 		WHERE email="${username}" AND verifyHash="${vCode}";
 	`, function(err, result){
-		if(err) throw err;
+		if(err) {
+			callback(err);
+			return;
+		}
+		
 		if(result[0]['count'] != 0){
 			connection.query(`
 				UPDATE Directory.Users 
 				SET verified=1, verifyHash=NULL
 				WHERE email="${username}";
 			`, function(err, result){
-				if(err) throw err;
+				if(err) {
+					callback(err);
+					return;
+				}
+				
 				var psl = require('psl');
 				var parsed = psl.parse(username.split('@')[1]);
 				domain = parsed.domain;
 				connection.query(`
 					INSERT IGNORE INTO Directory.Schools(domain)
 					VALUES ("${domain}");
-				`)
-			})
+				`, function(err, result) {
+					if (err) {
+						callback(err);
+						return;
+					}
+					
+					connection.query(`
+						UPDATE Directory.Users
+						SET schoolid = (SELECT schoolid FROM Directory.Schools WHERE domain = '${domain}')
+						WHERE email = '${username}';
+					`, function(err, result) {
+						if (err) {
+							callback(err);
+							return;
+						}
+						callback(null, true);
+					});
+				});
+			});
 		}
 		else{
-			callback(null, false);
+			callback('More than one user was found for this -- this should not happen.');
 		}
-	})
+	});
 }
 
 function isUniversityNew(domain, callback){
@@ -330,9 +355,9 @@ isUniversityNew('cuny.edu', function(err, result){
 
 */
 
-addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://t.me/uewhduwbe', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
-	//console.log(result)
-})
-getChatsForCourse('cuny.edu', 'csci', '320', function(err, result){
-	console.log(result)
-})
+// addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://t.me/uewhduwbe', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
+// 	//console.log(result)
+// })
+// getChatsForCourse('cuny.edu', 'csci', '320', function(err, result){
+// 	console.log(result)
+// })

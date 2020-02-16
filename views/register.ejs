@@ -1,0 +1,20 @@
+<% title = 'Sign Up' %>
+<%- include('partials/top.ejs') %>
+    <main>
+        <div class="title">
+            <h1>Sign Up</h1>
+            <span>You need a valid .edu email address to sign up.</span>
+        </div>
+        
+        <div class="central-box">
+            <% if (locals.error !== undefined) { %>
+                <div class="error"><%= error %></div>
+            <% } %>
+            <input id="username" name="username" type="email" placeholder="Username">
+            <input id="password" name="password" type="password" placeholder="Password">
+            <input id="password-confirm" name="password-confirm" type="password" placeholder="Confirm Password">
+            <div class="button">Sign Up</div>
+        </div>
+    </main>
+</body>
+</html>
