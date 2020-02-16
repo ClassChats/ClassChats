@@ -418,6 +418,12 @@ header * {
 .button--orange:hover {
   background-color: #ffbd45;
 }
+.button--blue {
+  background-color: #1568b7;
+}
+.button--blue:hover {
+  background-color: #03a9f4;
+}
 
 input {
   border: none;
@@ -456,6 +462,24 @@ input {
 
 .invisible-form {
   margin: 50px auto;
+  width: fit-content;
+}
+
+.search-bar {
+  margin: auto;
+  width: fit-content;
+}
+
+.add-bar {
+  margin: auto;
+  width: fit-content;
+}
+.add-bar input {
+  margin: 10px 5px;
+}
+.add-bar .button {
+  display: block;
+  margin: 10px auto;
   width: fit-content;
 }
 

@@ -91,6 +91,14 @@ header {
             background-color: #ffbd45;
         }
     }
+    
+    &--blue {
+        background-color: #1568b7;
+        
+        &:hover {
+            background-color: #03a9f4;
+        }
+    }
 }
 
 input {
@@ -133,4 +141,24 @@ input {
 .invisible-form {
     margin: 50px auto;
     width: fit-content;
+}
+
+.search-bar {
+    margin: auto;
+    width: fit-content;
+}
+
+.add-bar {
+    margin: auto;
+    width: fit-content;
+    
+    input {
+        margin: 10px 5px;
+    }
+    
+    .button {
+        display: block;
+        margin: 10px auto;
+        width: fit-content;
+    }
 }
