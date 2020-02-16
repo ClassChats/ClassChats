@@ -210,7 +210,7 @@ function getServiceByURL(link){
 	}
 }
 
-function addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, username, callback){
+function addChat(subject, courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, username, callback){
 	var mysql      = require('mysql');
 	var connection = mysql.createConnection({
 	  host     : 'localhost',
@@ -237,14 +237,14 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 				if(err) throw err;
 				connection.query(`
 					INSERT IGNORE INTO Subjects(name)
-					VALUES ("${section}");
+					VALUES ("${subject}");
 				`, function(err, result){
 					if(err) throw err;
 					connection.query(`
 						INSERT IGNORE INTO Courses(number, subjectid)
 						SELECT "${courseNumber}", subjectid
 						FROM Subjects 
-						WHERE Subjects.name = "${section}";
+						WHERE Subjects.name = "${subject}";
 					`, function(err, result){
 						if(err) throw err;
 						connection.query(`
@@ -253,10 +253,10 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 						`, function(err, result){
 							if(err) throw err;
 
-							console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
+							//console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
 							connection.query(`
 								INSERT INTO Classes(courseid, section, startTime, days, roomid, professorid)
-								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${section}" AND number="${courseNumber}") as courseid,
+								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${subject}" AND number="${courseNumber}") as courseid,
 								"${section}" as section,
 								${startTime} as startTime,
 								${days} as days,
@@ -274,13 +274,13 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 									AND
 									roomid = (SELECT roomid FROM Rooms LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid WHERE name="${building}" AND number="${roomNumber}" )
 									AND 
-									days IS NOT DISTINCT FROM ${days}
+									days <=> ${days}
 									AND
-									startTime IS NOT DISTINCT FROM ${startTime}
+									startTime <=> ${startTime}
 									AND
 									section = "${section}"
 									AND 
-									courseid = (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${section}" AND number="${courseNumber}")
+									courseid = (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${subject}" AND number="${courseNumber}")
 									) AS classid,
 									(SELECT userid FROM Directory.Users WHERE email="${username}"),
 									"${link}",
@@ -309,7 +309,16 @@ getChatsForCourse("CSCI", "111", function(err, result) {
 getChatsForCourse('cuny.edu', 'csci', '111', function(err, result){
 	console.log('getChatsForCourse '+result)
 })
+
 let email = 'eric.sherman58@qmail.cuny.edu'
+createAccount(email, 'password', function(err, result){
+	console.log(result)
+})
+
+isCorrect(email, '557713', function(err, result){
+	console.log(result)
+})
+
 verifyCredentials(email, 'password', function(err, result){
 	console.log('verifyCredentials '+ result)
 })
@@ -319,19 +328,12 @@ getUserUniversity(email, function(err, result){
 })
 
 
-createAccount(email, 'password', function(err, result){
-	console.log(result)
-})
-
-isCorrect(email, '557713', function(err, result){
-	console.log(result)
-})
 
 isUniversityNew('cuny.edu', function(err, result){
 	console.log('isUniversityNew ' + result)
 })
 
-//addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
-addChat('320', 'CSCI', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://chat.whatsapp.com/ckce7832y324', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
+//addChat(subject, courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
+addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://chat.whatsapp.com/ckce7832y324', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
 	console.log(result)
 })
