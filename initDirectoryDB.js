@@ -29,7 +29,7 @@ function createDB(){
 				connection.query(`
 					CREATE TABLE IF NOT EXISTS Users(
 						userid int NOT NULL AUTO_INCREMENT,
-						email VARCHAR(255) NOT NULL,
+						email VARCHAR(255) NOT NULL UNIQUE,
 						password VARCHAR(255) NOT NULL,
 						schoolid int,
 						verified bit NOT NULL DEFAULT 0,
