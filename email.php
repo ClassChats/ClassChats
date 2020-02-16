@@ -1,4 +1,6 @@
 <?php
+require_once "Mail.php";
+
 $from = '<classhacksjh@gmail.com>';
 $email = $argv[0];
 $to = '<'.$email.'>';
