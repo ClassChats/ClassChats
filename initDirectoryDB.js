@@ -8,17 +8,7 @@ function createDB(){
 
 
 	connection.connect();
-	/*
-	connection.query('USE GradeNotifier;', function (err, result){
-		if(err) throw err;
-		console.log(result)
-	});
-	connection.query('SELECT * FROM Users;', function (err, result){
-		if(err) throw err;
-		console.log(result)
-	});
-	*/
-	
+
 	connection.query(`
 		CREATE DATABASE IF NOT EXISTS Directory ;
 	`, function(err, result){
@@ -54,5 +44,4 @@ function createDB(){
 			})	
 		});
 	});
-	
 }
