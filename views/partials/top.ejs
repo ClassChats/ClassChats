@@ -1,0 +1,18 @@
+<%- include('header.ejs') %>
+<body>
+    <header>
+        <% if (session.username !== undefined) { %>
+            <a href="/u/<%= session.domain %>">
+        <% } else { %>
+            <a href="/">
+        <% } %>
+            <div class="logo">
+                <img src="/images/ClassChats Logo Words.png" title="ClassChats">
+            </div>
+        </a>
+        <% if (session.username !== undefined) { %>
+            <span><%= session.username %> | <a href="/">Log Out</a></span>
+        <% } else { %>
+            <span><a href="/signup">Sign Up</a> or <a href="/login">Log In</a></span>
+        <% } %>
+    </header>
