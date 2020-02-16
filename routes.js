@@ -34,9 +34,7 @@ app.route('/signup')
 	let password = req.body.password;
 
 	createAccount(username, password);
-	if (userCreated(username, password)) {
 		res.redirect('/emailVerification');
-	}
 }
 	})
 app.route('/emailVerification')
