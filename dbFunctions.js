@@ -30,7 +30,7 @@ function getChatsForCourse(domain, subject, number, callback){
 					return;
 				}
 				connection.query(`
-					SELECT * FROM Chats LEFT JOIN Classes ON Classes.courseid=${courseid} LEFT JOIN Services on Chats.serviceid=Services.serviceid; 
+					SELECT * FROM Chats LEFT JOIN Classes ON Classes.classid=Chats.classid LEFT JOIN Services on Chats.serviceid=Services.serviceid; 
 				`, function(err, result){
 					if(err) throw err;
 					callback(null, result);
@@ -184,6 +184,15 @@ function createUniversity(domain, universityName, callback){
 		WHERE domain="${domain}" AND name IS NULL;
 	`, callback);	
 }
+
+function valueOrNull(variable){
+	if(typeof variable ==='undefined' || variable==null){
+		return 'NULL';
+	}
+	else{
+		return variable;
+	}
+}
 function addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback){
 	var mysql      = require('mysql');
 	var connection = mysql.createConnection({
@@ -192,7 +201,7 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 	  password : 'password',
 	});
 
-	domain = domain.sub('.','_');
+	domain = domain.replace('.','_');
 	connection.query(`
 		USE ${domain};
 	`, function(err, result){
@@ -211,7 +220,7 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 				if(err) throw err;
 				connection.query(`
 					INSERT IGNORE INTO Subjects(name)
-					VALUES "${section}";
+					VALUES ("${section}");
 				`, function(err, result){
 					if(err) throw err;
 					connection.query(`
@@ -228,6 +237,12 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 							if(err) throw err;
 							connection.query(`
 								INSERT INTO Classes(courseid, section, startTime, days, roomid, professorid)
+								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${section}" AND number="${courseNumber}") as courseid,
+								"${section}" as section,
+								${startTime} as startTime,
+								${days} as days,
+								(SELECT roomid FROM Rooms LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid WHERE name="${building}" AND number="${roomNumber}" ) AS roomid,
+								(SELECT professorid FROM Professors WHERE name = "${professor}") AS professorid;
 							`)
 						})
 					})
@@ -271,4 +286,9 @@ isCorrect(email, '557713', function(err, result){
 */
 isUniversityNew('cuny.edu', function(err, result){
 	console.log('isUniversityNew ' + result)
+})
+
+//addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
+addChat('111', 'CSCI', null, 40, '207', 'Science Building', 'Kenneth Lord', 'http://whatsapp.com/chat/7832y324', 'cuny.edu', function(err, result){
+	console.log(result)
 })
