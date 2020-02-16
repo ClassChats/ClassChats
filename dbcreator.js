@@ -97,7 +97,8 @@ function createDB(domain){
 											    	PRIMARY KEY (classid),
 											    	FOREIGN KEY (courseid) REFERENCES Courses(courseid),
 											    	FOREIGN KEY (roomid) REFERENCES Rooms(roomid),
-											    	FOREIGN KEY (professorid) REFERENCES Professors(professorid)
+											    	FOREIGN KEY (professorid) REFERENCES Professors(professorid),
+											    	CONSTRAINT CLASSES_UC UNIQUE(courseid, section)
 										    	);
 											`, function(err, result){
 												if(err) throw err;
