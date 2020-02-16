@@ -1,5 +1,16 @@
 
 
+function bsToDays(bitstring){
+	var days = "";
+	dayArray=['S','M', 'T', 'W', 'TH', 'F', 'SA']
+	for(var i = 0; i < 7; i++){
+		if(bitstring[i] == '1'){
+			days += dayArray[i]+'/';
+		}
+	}
+	return days.substring(0, days.length-1);
+}
+
 function getChatsForCourse(domain, subject, number, callback){
 	var mysql      = require('mysql');
 	var connection = mysql.createConnection({
@@ -32,7 +43,7 @@ function getChatsForCourse(domain, subject, number, callback){
 				connection.query(`
 					SELECT Subjects.name as subjectName,
 					Courses.number as courseNumber,
-					Classes.days as daysOfWeek,
+					LPAD(CONV(Classes.days, 10, 2),7,'0') as daysOfWeek,
 					Rooms.number as roomNumber,
 					Buildings.name as buildingName,
 					Classes.section AS section,
@@ -57,6 +68,9 @@ function getChatsForCourse(domain, subject, number, callback){
 					WHERE Subjects.name = "${subject}" AND Courses.number = "${number}"
 				`, function(err, result){
 					if(err) throw err;
+					for(var i = 0; i < result.length; i++){
+						result[i].daysOfWeek =bsToDays(result[i].daysOfWeek);
+					}
 					callback(null, result);
 				})
 
