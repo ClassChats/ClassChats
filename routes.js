@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+// Serve static files
+app.use(express.static('public'));
+// Properly handle JSON
+app.use(express.json());
+
 // Import routers
 const baseRouter = require('./routes/base');
 const universityRouter = require('./routes/u');
