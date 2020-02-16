@@ -185,20 +185,13 @@ function createUniversity(domain, universityName, callback){
 	`, callback);	
 }
 
-function valueOrNull(variable){
-	if(typeof variable ==='undefined' || variable==null){
-		return 'NULL';
-	}
-	else{
-		return variable;
-	}
-}
-
 
 function getServiceByURL(link){
+	const url = require('url');
+	var parsed = url.parse(link);
+	var hostname = parsed.hostname;
 	var psl = require('psl');
-	var parsed = psl.parse(link);
-	var domain = parsed.domain;
+	var domain = psl.parse(hostname).domain
 	if(domain == 't.me'){
 		return 'telegram';
 	}
@@ -309,9 +302,6 @@ getChatsForCourse("CSCI", "111", function(err, result) {
 */
 
 /*
-getChatsForCourse('cuny.edu', 'csci', '111', function(err, result){
-	console.log('getChatsForCourse '+result)
-})
 
 let email = 'eric.sherman58@qmail.cuny.edu'
 createAccount(email, 'password', function(err, result){
@@ -337,8 +327,12 @@ isUniversityNew('cuny.edu', function(err, result){
 })
 
 //addChat(subject, courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
-addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://t.me/jdhdwbch', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
-	console.log(result)
-})
 
 */
+
+addChat('CSCI','320', '1A', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://t.me/uewhduwbe', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
+	//console.log(result)
+})
+getChatsForCourse('cuny.edu', 'csci', '320', function(err, result){
+	console.log(result)
+})
