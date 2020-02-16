@@ -70,7 +70,7 @@ function createDB(domain){
 									    CREATE TABLE IF NOT EXISTS Chats (
 									    	classid int NOT NULL,
 									    	userid int NOT NULL,
-									    	link VARCHAR(255) NOT NULL,
+									    	link VARCHAR(255) NOT NULL UNIQUE,
 									    	serviceid int,
 									    	FOREIGN KEY (serviceid) REFERENCES Services (serviceid),
 									    	FOREIGN KEY (userid) REFERENCES Directory.Users(userid)
