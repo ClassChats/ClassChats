@@ -20,7 +20,7 @@ function createDB(){
 			connection.query(`		
 				CREATE TABLE IF NOT EXISTS Schools (
 					schoolid int NOT NULL AUTO_INCREMENT,
-					name VARCHAR(255) NOT NULL,
+					name VARCHAR(255) NOT NULL UNIQUE,
 					domain VARCHAR(255) NOT NULL,
 					PRIMARY KEY (schoolid)
 				);
@@ -31,7 +31,7 @@ function createDB(){
 						userid int NOT NULL AUTO_INCREMENT,
 						email VARCHAR(255) NOT NULL,
 						password VARCHAR(255) NOT NULL,
-						schoolid int NOT NULL,
+						schoolid int,
 						verified bit NOT NULL DEFAULT 0,
 						verifyHash VARCHAR(255),
 						PRIMARY KEY (userid),
