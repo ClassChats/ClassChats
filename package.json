@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/JHACKS2020Winners/ClassChats/issues"
   },
-  "homepage": "https://github.com/JHACKS2020Winners/ClassChats#readme"
+  "homepage": "https://github.com/JHACKS2020Winners/ClassChats#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
