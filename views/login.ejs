@@ -6,14 +6,15 @@
             <h1>Log In</h1>
         </div>
         
-        <div class="central-box">
+        <form class="central-box" method="POST" action="/login">
             <% if (locals.error !== undefined) { %>
                 <div class="error"><%= error %></div>
             <% } %>
             <input id="username" name="username" type="email" placeholder="Username">
             <input id="password" name="password" type="password" placeholder="Password">
-            <div class="button">Log In</div>
-        </div>
+            <button id="submit" class="button">Log In</button>
+        </form>
     </main>
+    <!-- <script src="/js/login.js"></script> -->
 </body>
 </html>

@@ -391,3 +391,17 @@ getChatsForCourse('cuny.edu','CSCI','320', function(err, result){
 	if(err) throw err;
 	console.log(result)
 })
+
+
+module.exports = {
+	getChatsForCourse,
+	verifyCredentials,
+	getUserUniversity,
+	createAccount,
+	verify,
+	isUniversityNew,
+	createUniversity,
+	getServiceByURL,
+	addChat,
+	getChatsForCourse,
+}
