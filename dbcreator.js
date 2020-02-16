@@ -77,22 +77,31 @@ function createDB(domain){
 									`, function(err, result){
 										if(err) throw err;
 										connection.query(`
-										    CREATE TABLE IF NOT EXISTS Class (
-										    	classid int NOT NULL AUTO_INCREMENT,
-										    	courseid int NOT NULL,
-										    	section VARCHAR(255),
-										    	startTime time,
-										    	days TINYINT,
-										    	roomid int,
-										    	professorid int NOT NULL,
-										    	PRIMARY KEY (classid),
-										    	FOREIGN KEY (courseid) REFERENCES Course(courseid),
-										    	FOREIGN KEY (roomid) REFERENCES Room(roomid),
-										    	FOREIGN KEY (professorid) REFERENCES Professor(professorid)
-
-										    );
+										    CREATE TABLE IF NOT EXISTS Professor (
+										    	professorid int NOT NULL AUTO_INCREMENT,
+										    	name VARCHAR(255) NOT NULL,
+										    	PRIMARY KEY (professorid)
+										    )
 										`, function(err, result){
-											console.log('all done!')
+											if(err) throw err;
+											connection.query(`
+												CREATE TABLE IF NOT EXISTS Class (
+											    	classid int NOT NULL AUTO_INCREMENT,
+											    	courseid int NOT NULL,
+											    	section VARCHAR(255),
+											    	startTime time,
+											    	days TINYINT,
+											    	roomid int,
+											    	professorid int NOT NULL,
+											    	PRIMARY KEY (classid),
+											    	FOREIGN KEY (courseid) REFERENCES Course(courseid),
+											    	FOREIGN KEY (roomid) REFERENCES Room(roomid),
+											    	FOREIGN KEY (professorid) REFERENCES Professor(professorid)
+										    	);
+											`, function(err, result){
+												if(err) throw err;
+												console.log('all done!')
+											})
 										})
 									})
 								})
@@ -104,3 +113,8 @@ function createDB(domain){
 	});
 
 }
+
+
+
+
+createDB('cuny_edu')
