@@ -32,6 +32,18 @@ header {
     h1 {
         margin: 5px;
     }
+    
+    &--main {
+        margin: 100px 0;
+        
+        h1 {
+            font-size: 80pt;
+        }
+        
+        span {
+            font-size: 40pt;
+        }
+    }
 }
 
 .section {
