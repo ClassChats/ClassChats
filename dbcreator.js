@@ -41,7 +41,7 @@ function createDB(domain){
 						connection.query(`
 						    CREATE TABLE IF NOT EXISTS Buildings (
 						    	buildingid int NOT NULL AUTO_INCREMENT,
-						    	name VARCHAR(255),
+						    	name VARCHAR(255) UNIQUE,
 						    	PRIMARY KEY (buildingid)
 						    );
 						`, function(err, result){
