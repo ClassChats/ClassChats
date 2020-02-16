@@ -21,7 +21,7 @@ function createDB(){
 				CREATE TABLE IF NOT EXISTS Schools (
 					schoolid int NOT NULL AUTO_INCREMENT,
 					name VARCHAR(255) NOT NULL UNIQUE,
-					domain VARCHAR(255) NOT NULL,
+					domain VARCHAR(255) NOT NULL UNIQUE,
 					PRIMARY KEY (schoolid)
 				);
 			`, function(err, result){
