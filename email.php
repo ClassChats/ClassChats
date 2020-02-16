@@ -5,10 +5,10 @@ $from = 'classhacksjh@gmail.com';
 $email = $argv[1];
 echo $email;
 $to = $email;
-$subject = '"Classchats- Please verify"';
+$subject = 'ClassChats- Please verify';
 $vcode = $argv[2];
 $body = "                                                                                                               
-Welcome to Classchats!! We need you to veryify your account.
+Welcome to ClassChats!! We need you to verify your account.
 Please click the link below and enter the verification code:\n".$vcode;
 
 $headers = array(
