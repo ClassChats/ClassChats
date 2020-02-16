@@ -20,29 +20,39 @@ function createDB(){
 	*/
 	
 	connection.query(`
-		CREATE DATABASE Directory IF NOT EXISTS;
-	`);
-	connection.query(`
-	    USE Directory;
-	`);
-	connection.query(`
-		CREATE TABLE IF NOT EXISTS School (schoolid int NOT NULL AUTO_INCREMENT,name VARCHAR(255) NOT NULL,domain VARCHAR(255) NOT NULL,PRIMARY KEY (schoolid));
-	`)	
-	/*
-	connection.query(`
-		CREATE TABLE IF NOT EXISTS Users(
-			userid int NOT NULL AUTO_INCREMENT,
-			email VARCHAR(255) NOT NULL,
-			password VARCHAR(255) NOT NULL,
-			schoolid int NOT NULL,
-			verified bit NOT NULL DEFAULT 0,
-			verifyHash VARCHAR(255),
-			PRIMARY KEY (userid),
-			FOREIGN KEY (schoolid) REFERENCES School(schoolid)
-		);
-	`);
-	*/
+		CREATE DATABASE IF NOT EXISTS Directory ;
+	`, function(err, result){
+		if (err) throw err;
+		connection.query(`
+		    USE Directory;
+		`, function(err, result){
+			if (err) throw err;
+			connection.query(`		
+				CREATE TABLE IF NOT EXISTS School (
+					schoolid int NOT NULL AUTO_INCREMENT,
+					name VARCHAR(255) NOT NULL,
+					domain VARCHAR(255) NOT NULL,
+					PRIMARY KEY (schoolid)
+				);
+			`, function(err, result){
+				if (err) throw err;
+				connection.query(`
+					CREATE TABLE IF NOT EXISTS Users(
+						userid int NOT NULL AUTO_INCREMENT,
+						email VARCHAR(255) NOT NULL,
+						password VARCHAR(255) NOT NULL,
+						schoolid int NOT NULL,
+						verified bit NOT NULL DEFAULT 0,
+						verifyHash VARCHAR(255),
+						PRIMARY KEY (userid),
+						FOREIGN KEY (schoolid) REFERENCES School(schoolid)
+					);
+				`, function(err, result){
+					if(err) throw err;
+					console.log('ALL DONE!')
+				})
+			})	
+		});
+	});
 	
 }
-
-createDB();

@@ -12,76 +12,95 @@ function createDB(domain){
 	connection.connect();
 
 	connection.query(`
+	    CREATE DATABASE IF NOT EXISTS ${domain};
+	`, function(err, result){
+		if(err) throw err;
+		connection.query(`
+			USE ${domain};
+		`,  function(err, result){
+				if (err) throw err;
+				connection.query(`
+				    CREATE TABLE IF NOT EXISTS Subject (
+				    	subjectid int NOT NULL AUTO_INCREMENT,
+				    	name VARCHAR(255) NOT NULL,
+				    	PRIMARY KEY (subjectid)
+				    );
+				`, function(err, result){
+					if (err) throw err;
+					connection.query(`
+					    CREATE TABLE IF NOT EXISTS Course (
+					    	courseid int NOT NULL AUTO_INCREMENT,
+					    	subjectid int NOT NULL,
+					    	number VARCHAR(255) NOT NULL,
+					    	PRIMARY KEY (courseid),
+					    	FOREIGN KEY (subjectid) REFERENCES Subject (subjectid)
+					    );
+					`, function(err, result){
+						if (err) throw err;
+						connection.query(`
+						    CREATE TABLE IF NOT EXISTS Building (
+						    	buildingid int NOT NULL AUTO_INCREMENT,
+						    	name VARCHAR(255),
+						    	PRIMARY KEY (buildingid)
+						    );
+						`, function(err, result){
+							if (err) throw err;
+							connection.query(`
+							    CREATE TABLE IF NOT EXISTS Room (
+							    	roomid int NOT NULL AUTO_INCREMENT,
+							    	number VARCHAR(255) NOT NULL,
+							    	buildingid int NOT NULL,
+							    	coordinates Point,
+							    	PRIMARY KEY (roomid),
+							    	FOREIGN KEY (buildingid) REFERENCES Building (buildingid)
 
-		IF DB_ID('${domain}') IS NULL
-		BEGIN
-		    CREATE DATABASE ${domain};
-		    USE ${domain};
+							    );
+							`, function(err, result){
+								if(err) throw err;
+								connection.query(`
+								    CREATE TABLE IF NOT EXISTS Service (
+								    	serviceid int NOT NULL AUTO_INCREMENT,
+								    	name VARCHAR(255) NOT NULL,
+								    	PRIMARY KEY (serviceid)
+								    );		
+								`, function(err, result){
+									if(err) throw err;
+									connection.query(`
+									    CREATE TABLE IF NOT EXISTS Chats (
+									    	classid int NOT NULL,
+									    	userid int NOT NULL,
+									    	link VARCHAR(255) NOT NULL,
+									    	serviceid int,
+									    	FOREIGN KEY (serviceid) REFERENCES Service (serviceid),
+									    	FOREIGN KEY (userid) REFERENCES Directory.Users(userid)
+									    );				
+									`, function(err, result){
+										if(err) throw err;
+										connection.query(`
+										    CREATE TABLE IF NOT EXISTS Class (
+										    	classid int NOT NULL AUTO_INCREMENT,
+										    	courseid int NOT NULL,
+										    	section VARCHAR(255),
+										    	startTime time,
+										    	days TINYINT,
+										    	roomid int,
+										    	professorid int NOT NULL,
+										    	PRIMARY KEY (classid),
+										    	FOREIGN KEY (courseid) REFERENCES Course(courseid),
+										    	FOREIGN KEY (roomid) REFERENCES Room(roomid),
+										    	FOREIGN KEY (professorid) REFERENCES Professor(professorid)
 
-		    CREATE TABLE Subject (
-		    	subjectid int NOT NULL AUTO_INCREMENT,
-		    	name NVARCHAR NOT NULL,
-		    	PRIMARY KEY (subjectid)
-		    );
-
-		    CREATE TABLE Course (
-		    	courseid int NOT NULL AUTO_INCREMENT,
-		    	subjectid int NOT NULL,
-		    	number NVARCHAR NOT NULL,
-		    	PRIMARY KEY (courseid),
-		    	FOREIGN KEY (subjectid) REFERENCES Subject (subjectid)
-		    );
-
-		    CREATE TABLE Building (
-		    	buildingid int NOT NULL AUTO_INCREMENT,
-		    	name NVARCHAR,
-		    	PRIMARY KEY (buildingid)
-		    );
-
-		    CREATE TABLE Room (
-		    	roomid int NOT NULL AUTO_INCREMENT,
-		    	number NVARCHAR NOT NULL,
-		    	buildingid int NOT NULL,
-		    	coordinates Point,
-		    	PRIMARY KEY (roomid),
-		    	FOREIGN KEY (buildingid) REFERENCES Building (buildingid)
-
-		    );
-
-		    CREATE TABLE Service (
-		    	serviceid int NOT NULL AUTO_INCREMENT,
-		    	name NVARCHAR NOT NULL,
-		    	PRIMARY KEY (serviceid)
-		    );
-
-		    CREATE TABLE Chats (
-		    	classid int NOT NULL,
-		    	userid int NOT NULL,
-		    	link NVARCHAR NOT NULL,
-		    	serviceid int,
-		    	FOREIGN KEY (serviceid) REFERENCES Service (serviceid)
-		    	FOREIGN KEY (userid) REFERENCES Directory.Users(userid)
-		    );
-
-
-		    CREATE TABLE Class (
-		    	classid int NOT NULL AUTO_INCREMENT,
-		    	courseid int NOT NULL,
-		    	section NVARCHAR,
-		    	startTime time,
-		    	days TINYINT,
-		    	roomid int,
-		    	professorid int NOT NULL,
-		    	PRIMARY KEY (classid),
-		    	FOREIGN KEY (courseid) REFERENCES Course(courseid),
-		    	FOREIGN KEY (roomid) REFERENCES Room(roomid),
-		    	FOREIGN KEY (professorid) REFERENCES Professor(professorid)
-
-		    );
-
-
-		END
-
-	`)
+										    );
+										`, function(err, result){
+											console.log('all done!')
+										})
+									})
+								})
+							})
+						})
+					})
+				})
+		})
+	});
 
 }
