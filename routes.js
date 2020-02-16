@@ -98,8 +98,9 @@ app.route('/:university/AddChat')
 	let building = req.body.building;
 	let professor = req.body.room;
 	let chatLink = req.body.chatLink;
+	let domain = res.locals.domain;
 
-	addChat(course, section, startTime, days, roomNumber, building, professor, chatLink);
+	addChat(course, section, startTime, days, roomNumber, building, professor, chatLink, domain);
 	res.redirect('/:university/:subject/:courseNumber');
 }
 app.route('/:university/:subject/:courseNumber')
