@@ -4,24 +4,24 @@ let router = express.Router();
 router.route('/:university')
 	.get(function (res, req) {
 		if (!universityExists(req.locals.domain)) {
-			res.render('createUniversity.html', { university: req.session.university })
+			res.render('create', { university: req.session.university })
 		}
 		else {
-			res.render('university.html', { university: req.session.university })
+			res.render('university', { university: req.session.university })
 		}
 	});
 
 //res.render('loginPage.html', {university: req.session.university}
 router.route('/:university/search')
 	.get(function (req, res) {
-		res.render('courseSearch.html');
+		res.render('search');
 	})
 	.post(function (req, res) {
 		let domain = res.locals.domain;
 		let subject = req.body.subjectName;
 		let courseNumber = req.body.courseNumber;
 		getChatsForCourse(domain, subject, courseNumber)
-		res.render('searchResults.html', {department: department, courseNumber : courseNumber})
+		res.render('search', {department: department, courseNumber : courseNumber})
 	});
 
 router.route('/:university/add')
@@ -47,7 +47,7 @@ router.route('/:university/add')
 
 router.route('/:university/:subject/:courseNumber')
 	.get(function (req, res) {
-		res.render('courseChats.html');
+		res.render('course');
 	});
 
 

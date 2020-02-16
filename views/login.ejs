@@ -7,6 +7,9 @@
         </div>
         
         <div class="central-box">
+            <% if (locals.error !== undefined) { %>
+                <div class="error"><%= error %></div>
+            <% } %>
             <input id="username" name="username" type="email" placeholder="Username">
             <input id="password" name="password" type="password" placeholder="Password">
             <div class="button">Log In</div>

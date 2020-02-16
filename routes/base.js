@@ -3,7 +3,7 @@ let router = express.Router();
 
 router.route('/')
 	.get(function (req, res) {
-		res.send('home');
+		res.render('index');
 	});
 
 router.route('/login')
@@ -15,17 +15,17 @@ router.route('/login')
 		let password = req.body.password;
 		
 		if (username === undefined || password === undefined) {
-			res.render('loginPage.html', { error: "You need to enter a username and password."});
+			res.render('login', { error: "You need to enter a username and password."});
 		}
 
 		verifyCredentials(username, password, function(err, verified) {
 			if (err) {
-				res.render('loginPage.html', { error: err});
+				res.render('login', { error: err});
 				return;
 			}
 			
 			getUserUniversity(username, function(err, university) {
-				app.session.university = university;
+				app.session.domain = university;
 				res.redirect('/' + university);
 			})
 		})
@@ -33,7 +33,7 @@ router.route('/login')
 
 router.route('/signup')
 	.get(function (req, res){
-		res.render('signUp.html');
+		res.render('register');
 	})
 	.post(function (req, res){
 		let username = req.body.username;
@@ -41,26 +41,26 @@ router.route('/signup')
 		let passwordConfirm = req.body.passwordConfirm;
 		
 		if (username === undefined || password === undefined) {
-			res.render('signup.html', { error: "You need to enter a username and password."});
+			res.render('signup', { error: "You need to enter a username and password."});
 			return;
 		}
 		if (password !== passwordConfirm) {
-			res.render('signup.html', { error: "'Password' and 'Confirm Password' must match."});
+			res.render('signup', { error: "'Password' and 'Confirm Password' must match."});
 			return;
 		}
 		
 		createAccount(username, password, function(err, result) {
 			if (err) {
-				res.render('signup.html', { error: err});
+				res.render('signup', { error: err});
 			} else {
-				res.redirect('/verify');
+				res.redirect('/validate');
 			}
 		});
 	});
 
-router.route('/verify')
+router.route('/validate')
 	.get(function (req, res) {
-		render('verifyEmail.html');
+		render('validate');
 	})
 	.post(function (req, res) {
 		let code = req.body.code;
