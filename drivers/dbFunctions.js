@@ -30,7 +30,31 @@ function getChatsForCourse(domain, subject, number, callback){
 					return;
 				}
 				connection.query(`
-					SELECT * FROM Chats LEFT JOIN Classes ON Classes.classid=Chats.classid LEFT JOIN Services on Chats.serviceid=Services.serviceid; 
+					SELECT Subjects.name as subjectName,
+					Courses.number as courseNumber,
+					Classes.days as daysOfWeek,
+					Rooms.number as roomNumber,
+					Buildings.name as buildingName,
+					Classes.section AS section,
+					Professors.name AS professorName,
+					Services.name as serviceName,
+					Chats.link as link,
+					Classes.startTime AS startTime
+
+
+
+					FROM Classes
+					LEFT JOIN Courses ON
+					Classes.courseid = Courses.courseid 
+					LEFT JOIN Subjects ON
+					Courses.subjectid = Subjects.subjectid
+					LEFT JOIN Professors ON
+					Classes.professorid = Professors.professorid
+					LEFT JOIN Rooms ON Classes.roomid = Rooms.roomid
+					LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid
+					LEFT JOIN Chats ON Classes.classid = Chats.classid
+					LEFT JOIN Services ON Chats.serviceid = Services.serviceid
+					WHERE Subjects.name = "${subject}" AND Courses.number = "${number}"
 				`, function(err, result){
 					if(err) throw err;
 					callback(null, result);
@@ -83,11 +107,12 @@ function getUserUniversity(username, callback){
 	`, function(err, result){
 		if(err) throw err;
 		connection.query(`
-			SELECT domain FROM 
+			SELECT Schools.domain, Schools.name FROM 
 			Users LEFT JOIN Schools 
 			ON Users.schoolid = Schools.schoolid
 		`, function(err, result){
 			if(err) throw err;
+			console.log(result[0]);
 			callback(null, result);
 		})
 	})
@@ -361,3 +386,8 @@ isUniversityNew('cuny.edu', function(err, result){
 // getChatsForCourse('cuny.edu', 'csci', '320', function(err, result){
 // 	console.log(result)
 // })
+
+getChatsForCourse('cuny.edu','CSCI','320', function(err, result){
+	if(err) throw err;
+	console.log(result)
+})
