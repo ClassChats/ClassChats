@@ -90,6 +90,7 @@ app.route('/:university/AddChat')
 	res.render('addChat.html');
 	})
 	.post(function (req, res)) {
+	let username = req.session.username;
 	let course = req.body.course;
 	let section = req.body.section;
 	let startTime = req.body.startTime;
@@ -100,7 +101,7 @@ app.route('/:university/AddChat')
 	let chatLink = req.body.chatLink;
 	let domain = res.locals.domain;
 
-	addChat(course, section, startTime, days, roomNumber, building, professor, chatLink, domain);
+	addChat(course, section, startTime, days, roomNumber, building, professor, chatLink, domain, username);
 	res.redirect('/:university/:subject/:courseNumber');
 }
 app.route('/:university/:subject/:courseNumber')
