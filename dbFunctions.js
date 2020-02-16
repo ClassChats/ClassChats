@@ -193,7 +193,24 @@ function valueOrNull(variable){
 		return variable;
 	}
 }
-function addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback){
+
+
+function getServiceByURL(link){
+	var psl = require('psl');
+	var parsed = psl.parse(link);
+	var domain = parsed.domain;
+	if(domain == 't.me'){
+		return 'telegram';
+	}
+	else if(domain=='whatsapp.com'){
+		return 'whatsapp';
+	}
+	else{
+		return 'messenger';
+	}
+}
+
+function addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, username, callback){
 	var mysql      = require('mysql');
 	var connection = mysql.createConnection({
 	  host     : 'localhost',
@@ -247,7 +264,28 @@ function addChat(courseNumber, section, startTime, days, roomNumber, building, p
 								(SELECT professorid FROM Professors WHERE name = "${professor}") AS professorid;
 							`, function(err, result){
 								if(err) throw err;
-
+								var serviceName = getServiceByURL(link);
+								connection.query(`
+									INSERT INTO Chats(classid, userid, link, serviceid)
+									SELECT (SELECT classid 
+									FROM Classes 
+									WHERE
+									professorid = (SELECT professorid FROM Professors WHERE name = "${professor}")
+									AND
+									roomid = (SELECT roomid FROM Rooms LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid WHERE name="${building}" AND number="${roomNumber}" )
+									AND 
+									days IS NOT DISTINCT FROM ${days}
+									AND
+									startTime IS NOT DISTINCT FROM ${startTime}
+									AND
+									section = "${section}"
+									AND 
+									courseid = (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${section}" AND number="${courseNumber}")
+									) AS classid,
+									(SELECT userid FROM Directory.Users WHERE email="${username}"),
+									"${link}",
+									(SELECT serviceid FROM Services WHERE name="${serviceName}") 
+								`)
 							})
 						})
 					})
@@ -280,7 +318,7 @@ getUserUniversity(email, function(err, result){
 	console.log('getUserUniversity '+result)
 })
 
-/*
+
 createAccount(email, 'password', function(err, result){
 	console.log(result)
 })
@@ -288,12 +326,12 @@ createAccount(email, 'password', function(err, result){
 isCorrect(email, '557713', function(err, result){
 	console.log(result)
 })
-*/
+
 isUniversityNew('cuny.edu', function(err, result){
 	console.log('isUniversityNew ' + result)
 })
 
 //addChat(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, callback)
-addChat('111', 'CSCI', null, 40, '207', 'Science Building', 'Jerry Waxman', 'http://whatsapp.com/chat/7832y324', 'cuny.edu', function(err, result){
+addChat('320', 'CSCI', null, 40, '017', 'Remsen Hall', 'Bojana Obrenic', 'http://chat.whatsapp.com/ckce7832y324', 'cuny.edu', 'eric.sherman58@qmail.cuny.edu',function(err, result){
 	console.log(result)
 })
