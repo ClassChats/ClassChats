@@ -26,7 +26,7 @@ function getChatsForCourse(domain, subject, number, callback){
 				if (err) throw err;
 				let courseid = result[0]['courseid']
 				connection.query(`
-					SELECT * FROM Chats LEFT JOIN Class ON Class.courseid=${courseid}; 
+					SELECT * FROM Chats LEFT JOIN Class ON Class.courseid=${courseid} LEFT JOIN Services on Chats.serviceid=Services.serviceid; 
 				`, function(err, result){
 					if(err) throw err;
 					callback(null, result);
