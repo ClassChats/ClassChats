@@ -1,4 +1,4 @@
-// Define the routes for courses. This is accessed via /:domain/c/:department/:coursenumber
+// Define the routes for courses. This is accessed via /:domain/c/:department/:courseNumber
 async function routes(app, opts, done) {
     app.get('/:subject/:courseNumber', async (request, reply) => {
         reply.send({
