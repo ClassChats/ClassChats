@@ -3,10 +3,12 @@ import * as fastify from 'fastify';
 const app = fastify({ logger: true });
 
 // Import the routes
+import {routes as baseRoutes} from './routes/base';
 import {routes as domainRoutes} from './routes/domain/domain';
 import {routes as adminRoutes} from './routes/admin';
 
-// Register prefixed routes
+// Register base and prefixed routes
+app.register(baseRoutes);
 app.register(domainRoutes, {prefix: '/:domain'});
 app.register(adminRoutes, {prefix: '/admin'});
 
