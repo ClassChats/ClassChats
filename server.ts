@@ -4,14 +4,11 @@ const app = fastify({ logger: true });
 
 // Import the routes
 import {routes as domainRoutes} from './routes/domain/domain';
+import {routes as adminRoutes} from './routes/admin';
 
 // Register prefixed routes
 app.register(domainRoutes, {prefix: '/:domain'});
-
-// Declare the routes
-app.get('/', async (request, reply) => {
-  return 'homepage';
-});
+app.register(adminRoutes, {prefix: '/admin'});
 
 
 // Run the server!
