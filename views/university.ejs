@@ -26,8 +26,17 @@
                             )
                        <%}%></td>
                     <td>
-                        <%let attrib = 'disabled title="please sign in to your '+university+' email"';
-                        console.log(attrib);%>
+                        <%
+                        function escapeHtml(unsafe) {
+                            return unsafe
+                                 .replace(/&/g, "&amp;")
+                                 .replace(/</g, "&lt;")
+                                 .replace(/>/g, "&gt;")
+                                 .replace(/"/g, "&quot;")
+                                 .replace(/'/g, "&#039;");
+                        }
+                        let attrib = 'disabled title="Please sign in to your '+escapeHtml(university)+' email."';
+                        %>
                         <a href="<%= locals.session.university==university || '' %>">
                             <button class="button" <%- locals.session.university==university ? "" : 
                             attrib; %>
