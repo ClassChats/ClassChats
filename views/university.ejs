@@ -1,8 +1,8 @@
-<% title = locals.session.university %>
+<% title = university %>
 <%- include('partials/top.ejs') %>
     <main>
         <div class="title">
-            <h1>CUNY (cuny.edu) Chats</h1>
+            <h1><%= university %> Chats</h1>
             <span>Showing nearby classes happening today</span>
         </div>
         <div class="section">
@@ -26,7 +26,12 @@
                             )
                        <%}%></td>
                     <td>
-                        <a href="<%= res.link %>"><div class="button">Join</div></a>
+                        <%let attrib = 'disabled title="please sign in to your '+university+' email"';
+                        console.log(attrib);%>
+                        <a href="<%= locals.session.university==university || '' %>">
+                            <button class="button" <%- locals.session.university==university ? "" : 
+                            attrib; %>
+                             >Join</button></a>
                     </td>
                 </tr>
                 <% } %>

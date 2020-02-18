@@ -427,6 +427,10 @@ header * {
 .button--blue:hover {
   background-color: #03a9f4;
 }
+.button:disabled {
+  background-color: #A9A9A9;
+  cursor: not-allowed;
+}
 
 input {
   border: none;
