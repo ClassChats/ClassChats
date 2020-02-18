@@ -1,2 +1,8 @@
 # ClassChats
-YOU KNOW WHAT IT IS
+
+Proposed Stack:
+- Server: Fastify
+- Language: TypeScript
+- ORM: Sequelize
+- DBMS: MySQL
+- Front-End Framework: React?
