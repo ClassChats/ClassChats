@@ -15,7 +15,16 @@
                     <td><%= res.serviceName %></td>
                     <td><%= res.subjectName + ' ' + res.courseNumber %></td>
                     <td><%= res.professorName %></td>
-                    <td>Section <%= res.section %> (<%= res.daysOfWeek + ' ' + res.startTime %>)</td>
+                    <td>Section <%= res.section %> 
+                        <% if(!(res.daysOfWeek === 'undefined' || res.startTime === 'undefined')){ %>
+                            ( <% if(!(res.daysOfWeek === 'undefined')){ %>
+                                <%= res.daysOfWeek + " "%>
+                            <%}%>
+                            <% if(!(res.startTime === 'undefined')){ %>
+                                <%= res.startTime%>
+                            <%}%>
+                            )
+                       <%}%></td>
                     <td>
                         <a href="<%= res.link %>"><div class="button">Join</div></a>
                     </td>
