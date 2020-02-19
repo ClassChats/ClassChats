@@ -1,51 +1,58 @@
 <% title = university %>
 <%- include('partials/top.ejs') %>
     <main>
-        <div class="title">
-            <h1><%= university %> Chats</h1>
-            <span>Showing nearby classes happening today</span>
-        </div>
-        <div class="section">
-            <div class="top">
-                <h3>Courses</h3>
+        <% if(exists){ %>
+            <div class="title">
+                <h1><%= university %> Chats</h1>
+                <span>Showing nearby classes happening today</span>
             </div>
-            <table class="chat-list">
-                <% for (let i = 0; i < locals.result.length; i++) { let res = result[i]; %> 
-                <tr>
-                    <td><%= res.serviceName %></td>
-                    <td><%= res.subjectName + ' ' + res.courseNumber %></td>
-                    <td><%= res.professorName %></td>
-                    <td>Section <%= res.section %> 
-                        <% if(!(res.daysOfWeek === 'undefined' || res.startTime === 'undefined')){ %>
-                            ( <% if(!(res.daysOfWeek === 'undefined')){ %>
-                                <%= res.daysOfWeek + " "%>
-                            <%}%>
-                            <% if(!(res.startTime === 'undefined')){ %>
-                                <%= res.startTime%>
-                            <%}%>
-                            )
-                       <%}%></td>
-                    <td>
-                        <%
-                        function escapeHtml(unsafe) {
-                            return unsafe
-                                 .replace(/&/g, "&amp;")
-                                 .replace(/</g, "&lt;")
-                                 .replace(/>/g, "&gt;")
-                                 .replace(/"/g, "&quot;")
-                                 .replace(/'/g, "&#039;");
-                        }
-                        let attrib = 'disabled title="Please sign in to your '+escapeHtml(university)+' email."';
-                        %>
-                        <a href="<%= locals.session.university==university || '' %>">
-                            <button class="button" <%- locals.session.university==university ? "" : 
-                            attrib; %>
-                             >Join</button></a>
-                    </td>
-                </tr>
-                <% } %>
-            </table>
-        </div>
+            <div class="section">
+                <div class="top">
+                    <h3>Courses</h3>
+                </div>
+                <table class="chat-list">
+                    <% for (let i = 0; i < locals.result.length; i++) { let res = result[i]; %> 
+                    <tr>
+                        <td><%= res.serviceName %></td>
+                        <td><%= res.subjectName + ' ' + res.courseNumber %></td>
+                        <td><%= res.professorName %></td>
+                        <td>Section <%= res.section %> 
+                            <% if(!(res.daysOfWeek === 'undefined' || res.startTime === 'undefined')){ %>
+                                ( <% if(!(res.daysOfWeek === 'undefined')){ %>
+                                    <%= res.daysOfWeek + " "%>
+                                <%}%>
+                                <% if(!(res.startTime === 'undefined')){ %>
+                                    <%= res.startTime%>
+                                <%}%>
+                                )
+                           <%}%></td>
+                        <td>
+                            <%
+                            function escapeHtml(unsafe) {
+                                return unsafe
+                                     .replace(/&/g, "&amp;")
+                                     .replace(/</g, "&lt;")
+                                     .replace(/>/g, "&gt;")
+                                     .replace(/"/g, "&quot;")
+                                     .replace(/'/g, "&#039;");
+                            }
+                            let attrib = 'disabled title="Please sign in to your '+escapeHtml(university)+' email."';
+                            %>
+                            <a href="<%= locals.session.university==university || '' %>">
+                                <button class="button" <%- locals.session.university==university ? "" : 
+                                attrib; %>
+                                 >Join</button></a>
+                        </td>
+                    </tr>
+                    <% } %>
+                </table>
+            </div>
+        <% } else{
+        %>
+                <div class="title">
+                <h1><%= university %> is not registered on ClassChats</h1>
+            </div>
+        <% } %>
     </main>
 </body>
 </html>

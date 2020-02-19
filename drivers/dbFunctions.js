@@ -30,7 +30,8 @@ function getChatsForUniversity(domain, callback){
 	connection.query(`
 		USE ${domain};
 	`, function(err, result){
-		if (err) throw err;
+		if (err) callback(err);
+		return
 		connection.query(`
 			SELECT Subjects.name as subjectName,
 			Courses.number as courseNumber,
@@ -57,7 +58,10 @@ function getChatsForUniversity(domain, callback){
 			LEFT JOIN Chats ON Classes.classid = Chats.classid
 			LEFT JOIN Services ON Chats.serviceid = Services.serviceid
 		`,function(err, result){
-			if(err) throw err;
+			if(err) {
+				callback(err);
+				return;
+			}
 			for(var i = 0; i < result.length; i++){
 				result[i].daysOfWeek =bsToDays(result[i].daysOfWeek);
 			}
