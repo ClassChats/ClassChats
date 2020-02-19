@@ -8,10 +8,10 @@ import {routes as searchRoutes} from './search/search';
 
 async function routes(app, opts, done) {
     app.get('/', async (request, reply) => {
-        reply.send({
+        return {
             type: 'domain',
             domain: request.params.domain,
-        });
+        };
     });
     
     // Register the prefixed routes
