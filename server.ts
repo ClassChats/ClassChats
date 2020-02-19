@@ -1,5 +1,6 @@
 // Require the framework and instantiate it
-const fastify = require('fastify')({ logger: true });
+import fastifyModule from 'fastify';
+const fastify = fastifyModule({ logger: true });
 
 // Other imports
 import { AddressInfo } from 'net';
@@ -7,9 +8,9 @@ import { AddressInfo } from 'net';
 // Redirect trailing slashes to non-trailing slashes
 fastify.addHook('onRequest', (request, reply, done) => {
     console.log(request.req.url);
-    if (request.req.url.match(/\/.*\/+$/)) {
+    if (request.req.url!.match(/\/.*\/+$/)) {
         // Replace empty string with '/' to avoid issues with the root path
-        const newUrl = request.req.url.replace(/\/+$/, '') === '' ? '/' : '';
+        const newUrl = request.req.url!.replace(/\/+$/, '') === '' ? '/' : '';
         reply.redirect(301, newUrl);
     }
     
