@@ -17,9 +17,9 @@ fastify.addHook('onRequest', (request, reply, done) => {
 });
 
 // Register base and prefixed routes
-fastify.register(require('./routes/base'));
-fastify.register(require('./routes/domain/domain'), {prefix: '/:domain'});
-fastify.register(require('./routes/admin'), {prefix: '/admin'});
+fastify.register(require('./src/routes/base'));
+fastify.register(require('./src/routes/domain/domain'), {prefix: '/:domain'});
+fastify.register(require('./src/routes/admin'), {prefix: '/admin'});
 
 
 // Run the server!
