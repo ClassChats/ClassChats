@@ -2,6 +2,9 @@
 import * as fastify from 'fastify';
 const app = fastify({ logger: true });
 
+// Other imports
+import { AddressInfo } from 'net';
+
 // Import the routes
 import {routes as baseRoutes} from './routes/base';
 import {routes as domainRoutes} from './routes/domain/domain';
@@ -17,7 +20,7 @@ app.register(adminRoutes, {prefix: '/admin'});
 async function start() {
   try {
     await app.listen(3000);
-    app.log.info(`server listening on ${app.server.address()}`); //.port
+    app.log.info(`server listening on ${(app.server.address() as AddressInfo).port}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
