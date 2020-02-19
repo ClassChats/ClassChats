@@ -7,8 +7,10 @@ import { AddressInfo } from 'net';
 // Redirect trailing slashes to non-trailing slashes
 fastify.addHook('onRequest', (request, reply, done) => {
     console.log(request.req.url);
-    if (request.req.url.match(/.*\/+$/)) {
-        reply.redirect(301, request.req.url.replace(/\/+$/, ''));
+    if (request.req.url.match(/\/.*\/+$/)) {
+        // Replace empty string with '/' to avoid issues with the root path
+        const newUrl = request.req.url.replace(/\/+$/, '') === '' ? '/' : '';
+        reply.redirect(301, newUrl);
     }
     
     done();
