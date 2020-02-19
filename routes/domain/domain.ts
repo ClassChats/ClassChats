@@ -9,7 +9,7 @@ async function routes(app, opts, done) {
     });
     
     // Register the prefixed routes
-    app.register(require('./validate/validate'), {prefix: '/validate'});
+    app.register(require('./verify/verify'), {prefix: '/verify'});
     app.register(require('./c/course'), {prefix: '/c'});
     app.register(require('./r/room'), {prefix: '/r'});
     app.register(require('./add/add'), {prefix: '/add'});
