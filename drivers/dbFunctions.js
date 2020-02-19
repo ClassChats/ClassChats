@@ -30,8 +30,9 @@ function getChatsForUniversity(domain, callback){
 	connection.query(`
 		USE ${domain};
 	`, function(err, result){
-		if (err) callback(err);
-		return
+		if (err) {callback(err);
+			return
+		}
 		connection.query(`
 			SELECT Subjects.name as subjectName,
 			Courses.number as courseNumber,
