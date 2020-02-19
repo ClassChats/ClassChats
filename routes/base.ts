@@ -25,4 +25,4 @@ async function routes(app, opts, done) {
     done();
 }
 
-export {routes};
+module.exports = routes;

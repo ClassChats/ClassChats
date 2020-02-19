@@ -1,4 +1,5 @@
 // Define the routes for rooms. This is accessed via /:domain/r/:building/:roomNumber
+
 async function routes(app, opts, done) {
     app.get('/', async (request, reply) => {
         return {
@@ -10,4 +11,4 @@ async function routes(app, opts, done) {
     done();
 }
 
-export {routes};
+module.exports = routes;

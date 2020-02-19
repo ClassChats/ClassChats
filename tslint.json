@@ -13,6 +13,7 @@
         "no-console": false,
         "no-namespace": false,
         "no-trailing-whitespace": [true, "ignore-comments", "ignore-blank-lines"],
+        "no-var-requires": false,
         "semicolon": [true, "always"],
         "triple-equals": false,
         "quotemark": [true, "single", "avoid-escape"]
