@@ -7,6 +7,6 @@ Service.init({
 		type: Sequelize.STRING,
 		unique: true, // Unique so it can be used as a CSS class
 	},
-}, { sequelize, modelName: 'service'});
+}, { sequelize, modelName: 'Service'});
 
 module.exports = Service;

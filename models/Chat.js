@@ -11,7 +11,7 @@ Chat.init({
 	owner_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: User,
+			model: 'User',
 			key: 'id'
 		}
 		// allow null in case user deletes acct
@@ -19,7 +19,7 @@ Chat.init({
 	class_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: Class,
+			model: 'Class',
 			key: 'id'
 		},
 		allowNull: false,
@@ -27,7 +27,7 @@ Chat.init({
 	service_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: Service,
+			model: 'Service',
 			key: 'id'
 		}
 		// allow null in case unknown service

@@ -12,7 +12,7 @@ Subject.init({
 		*/
 		type: Sequelize.INTEGER,
 		references: {
-			model: University,
+			model: 'University',
 			key: 'id',
 		}
 	}

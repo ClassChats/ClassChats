@@ -22,24 +22,24 @@ Class.init({
 	course_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: Course,
+			model: 'Course',
 			key: 'id'
 		}
 	},
 	room_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: Room,
+			model: 'Room',
 			key: 'id'
 		}
 	},
 	professor_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: Professor,
+			model: 'Professor',
 			key: 'id'
 		}
 	}
-}, { sequelize, modelName: 'class'});
+}, { sequelize, modelName: 'Class'});
 
 module.exports = Class;

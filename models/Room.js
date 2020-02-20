@@ -14,7 +14,7 @@ Room.init({
 	building_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: Building,
+			model: 'Building',
 			key: 'id'
 		}
 	}

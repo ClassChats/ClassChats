@@ -5,8 +5,8 @@ class Email extends Sequelize.Model {}
 Email.init({
 	user_id: {
 		type: Sequelize.INTEGER,
-		references:{
-			model: User,
+		references: {
+			model: 'User',
 			key: 'id'
 		}
 	},

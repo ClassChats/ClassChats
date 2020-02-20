@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../connectors/dbConnector');
 
 class UniversityGroup extends Sequelize.Model {}
-Service.init({
+UniversityGroup.init({
 	name: {
 		type: Sequelize.STRING,
 		unique: true,

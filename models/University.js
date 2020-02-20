@@ -38,7 +38,7 @@ University.init({
 		// university group.
 		type: Sequelize.INTEGER,
 		references: {
-			model: UniversityGroup,
+			model: 'UniversityGroup',
 			key: 'id'
 		}
 	}
