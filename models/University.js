@@ -38,10 +38,10 @@ University.init({
 		// university group.
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'UniversityGroup',
+			model: 'UniversityGroups',
 			key: 'id'
 		}
 	}
-}, { sequelize, modelName: 'university'});
+}, { sequelize, modelName: 'University'});
 
 module.exports = University;

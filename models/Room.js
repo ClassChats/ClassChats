@@ -14,10 +14,10 @@ Room.init({
 	building_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'Building',
+			model: 'Buildings',
 			key: 'id'
 		}
 	}
-}, { sequelize, modelName: 'room'});
+}, { sequelize, modelName: 'Room'});
 
 module.exports = Room;

@@ -22,21 +22,21 @@ Class.init({
 	course_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'Course',
+			model: 'Courses',
 			key: 'id'
 		}
 	},
 	room_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'Room',
+			model: 'Rooms',
 			key: 'id'
 		}
 	},
 	professor_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'Professor',
+			model: 'Professors',
 			key: 'id'
 		}
 	}

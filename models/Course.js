@@ -10,7 +10,7 @@ Course.init({
 	subject_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'Subject',
+			model: 'Subjects',
 			key: 'id'
 		},
 		allowNull: false,
@@ -19,11 +19,11 @@ Course.init({
 		// To ensure that autofill only shows suggestions for that particular university.
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'University',
+			model: 'Universities',
 			key: 'id'
 		},
 		allowNull: false,
 	}
-}, { sequelize, modelName: 'course'});
+}, { sequelize, modelName: 'Course'});
 
 module.exports = Course;

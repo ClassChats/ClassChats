@@ -7,6 +7,6 @@ UniversityGroup.init({
 		type: Sequelize.STRING,
 		unique: true,
 	}
-}, { sequelize, modelName: 'universitygroup'});
+}, { sequelize, modelName: 'UniversityGroup'});
 
 module.exports = UniversityGroup;

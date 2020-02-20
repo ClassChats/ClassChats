@@ -6,7 +6,7 @@ Email.init({
 	user_id: {
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'User',
+			model: 'Users',
 			key: 'id'
 		}
 	},
@@ -22,6 +22,6 @@ Email.init({
 		// ago, send a new email and switch teh cerify code.
 		type: Sequelize.STRING,
 	},
-}, { sequelize, modelName: 'email'});
+}, { sequelize, modelName: 'Email'});
 
 module.exports = Email;

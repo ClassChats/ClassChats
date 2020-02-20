@@ -12,10 +12,10 @@ Subject.init({
 		*/
 		type: Sequelize.INTEGER,
 		references: {
-			model: 'University',
+			model: 'Universities',
 			key: 'id',
 		}
 	}
-}, { sequelize, modelName: 'subject'});
+}, { sequelize, modelName: 'Subject'});
 
 module.exports = Subject;
