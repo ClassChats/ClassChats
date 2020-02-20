@@ -1,3 +1,6 @@
+// Set up environment variables
+require('dotenv').config();
+
 // Require the framework and instantiate it
 import fastifyModule from 'fastify';
 const fastify = fastifyModule({ logger: true });
