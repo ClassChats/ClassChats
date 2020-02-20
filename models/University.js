@@ -5,7 +5,7 @@ University.init({
 	domain: {
 		type: Sequelize.STRING,
 		allowNull: false,
-	}
+	},
 	hostname: {
 		type: Sequelize.STRING,
 		unique: true,
@@ -19,7 +19,7 @@ University.init({
 	name: {
 		type: Sequelize.STRING,
 		allowNull: false,
-	}
+	},
 	nameApproved: {
 		type: Sequelize.BOOLEAN,
 		default: false,
