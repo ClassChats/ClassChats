@@ -8,7 +8,7 @@ Room.init({
 		// Not a problem for online classes because class's room is null
 	},
 	coordinates: {
-		type: Sequelize.GEOMETRY('POINT')  
+		type: Sequelize.GEOMETRY('POINT'),
 	},
 	building_id: {
 		type: Sequelize.INTEGER,

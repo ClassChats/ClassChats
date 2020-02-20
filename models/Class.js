@@ -8,6 +8,8 @@ Class.init({
 		defaultValue: null
 	},
 	daysOfWeek: {
+		// Stored as a 7-bit integer where each bit represents a day of the week.
+		// Online classes are set to 0.
 		type: Sequelize.TINYINT,
 		defaultValue: 0
 	},

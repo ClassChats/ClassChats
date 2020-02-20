@@ -4,7 +4,7 @@ class Service extends Sequelize.Model {}
 Service.init({
 	name: {
 		type: Sequelize.STRING,
-		unique: true,
+		unique: true, // Unique so it can be used as a CSS class
 	},
 }, { sequelize, modelName: 'service'});
 

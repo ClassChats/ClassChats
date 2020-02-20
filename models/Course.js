@@ -15,6 +15,7 @@ Course.init({
 		allowNull: false,
 	},
 	university_id: {
+		// To ensure that autofill only shows suggestions for that particular university.
 		type: Sequelize.INTEGER,
 		references: {
 			model: University,
