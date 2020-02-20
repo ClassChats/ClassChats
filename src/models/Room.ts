@@ -11,13 +11,8 @@ Room.init({
 	coordinates: {
 		type: Sequelize.GEOMETRY('POINT'),
 	},
-	building_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Buildings',
-			key: 'id'
-		}
-	}
 }, { sequelize, modelName: 'Room'});
 
+import Building = require('./Subject');
+Room.hasOne(Building)
 export = Room;

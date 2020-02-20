@@ -7,23 +7,19 @@ Course.init({
 		type: Sequelize.STRING,
 		allowNull: false,
 	},
-	subject_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Subjects',
-			key: 'id'
-		},
-		allowNull: false,
-	},
-	university_id: {
-		// To ensure that autofill only shows suggestions for that particular university.
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Universities',
-			key: 'id'
-		},
+}, { sequelize, modelName: 'Course'});
+import Subject = require('./Subject');
+import University = require('./University');
+Course.hasOne(Subject, {
+	foreignKey: {
 		allowNull: false,
 	}
-}, { sequelize, modelName: 'Course'});
+});
 
+// To ensure that autofill only shows suggestions for that particular university.
+Course.hasOne(University, {
+	foreignKey: {
+		allowNull: false,
+	}
+});
 export = Course;
