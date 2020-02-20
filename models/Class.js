@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const sequelize = require('../connectors/dbConnector');
 
 class Class extends Sequelize.Model {}
 Class.init({

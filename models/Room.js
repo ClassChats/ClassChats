@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const sequelize = require('../connectors/dbConnector');
 
 class Room extends Sequelize.Model {}
 Room.init({
