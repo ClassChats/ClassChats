@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node build/server.js",
+    "ts": "nodemon -x ts-node src/server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
