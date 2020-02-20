@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../connectors/dbConnector');
+import Sequelize = require('sequelize');
+import sequelize = require('../connectors/dbConnector');
 
 class Service extends Sequelize.Model {}
 Service.init({
@@ -9,4 +9,4 @@ Service.init({
 	},
 }, { sequelize, modelName: 'Service'});
 
-module.exports = Service;
+export = Service;

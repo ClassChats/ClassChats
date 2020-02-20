@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../connectors/dbConnector');
+import Sequelize = require('sequelize');
+import sequelize = require('../connectors/dbConnector');
 
 class UniversityGroup extends Sequelize.Model {}
 UniversityGroup.init({
@@ -9,4 +9,4 @@ UniversityGroup.init({
 	}
 }, { sequelize, modelName: 'UniversityGroup'});
 
-module.exports = UniversityGroup;
+export = UniversityGroup;

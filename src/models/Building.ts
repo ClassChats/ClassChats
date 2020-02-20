@@ -1,4 +1,4 @@
-import * as Sequelize from 'sequelize';
+import Sequelize = require('sequelize');
 import sequelize = require('../connectors/dbConnector');
 
 class Building extends Sequelize.Model {}

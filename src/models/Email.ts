@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../connectors/dbConnector');
+import Sequelize = require('sequelize');
+import sequelize = require('../connectors/dbConnector');
 
 class Email extends Sequelize.Model {}
 Email.init({
@@ -15,7 +15,7 @@ Email.init({
 	},
 	verified: {
 		type: Sequelize.BOOLEAN,
-		default: false,
+		defaultValue: false,
 	},
 	verifyCode: {
 		// We'll do a check to see how long ago the record was updated. If it's too long
@@ -24,4 +24,4 @@ Email.init({
 	},
 }, { sequelize, modelName: 'Email'});
 
-module.exports = Email;
+export = Email;

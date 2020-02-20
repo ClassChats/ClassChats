@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../connectors/dbConnector');
+import Sequelize = require('sequelize');
+import sequelize = require('../connectors/dbConnector');
 
 class Room extends Sequelize.Model {}
 Room.init({
@@ -20,4 +20,4 @@ Room.init({
 	}
 }, { sequelize, modelName: 'Room'});
 
-module.exports = Room;
+export = Room;

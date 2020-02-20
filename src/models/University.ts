@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../connectors/dbConnector');
+import Sequelize = require('sequelize');
+import sequelize = require('../connectors/dbConnector');
 
 class University extends Sequelize.Model {}
 University.init({
@@ -30,7 +30,7 @@ University.init({
 	nameApproved: {
 		// Whether the name was approved by an admin. Also true if the name is changed by an admin.
 		type: Sequelize.BOOLEAN,
-		default: false,
+		defaultValue: false,
 		allowNull: false,
 	},
 	university_group_id: {
@@ -44,4 +44,4 @@ University.init({
 	}
 }, { sequelize, modelName: 'University'});
 
-module.exports = University;
+export = University;
