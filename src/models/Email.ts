@@ -3,13 +3,6 @@ import sequelize = require('../connectors/dbConnector');
 
 class Email extends Sequelize.Model {}
 Email.init({
-	user_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Users',
-			key: 'id'
-		}
-	},
 	email: {
 		type: Sequelize.STRING
 	},
@@ -23,5 +16,10 @@ Email.init({
 		type: Sequelize.STRING,
 	},
 }, { sequelize, modelName: 'Email'});
-
+import User = require('./User');
+Email.hasOne(User, {
+	foreignKey: {
+		allowNull: false,
+	}
+});
 export = Email;

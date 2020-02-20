@@ -33,15 +33,10 @@ University.init({
 		defaultValue: false,
 		allowNull: false,
 	},
-	university_group_id: {
-		// Any user belonging to a university can access any other university in the same
-		// university group.
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'UniversityGroups',
-			key: 'id'
-		}
-	}
 }, { sequelize, modelName: 'University'});
 
+// Any user belonging to a university can access any other university in the same
+// university group.
+import UniversityGroup = require('./UniversityGroup');
+University.hasOne(UniversityGroup);
 export = University;

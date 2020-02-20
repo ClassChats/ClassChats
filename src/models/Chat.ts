@@ -7,31 +7,21 @@ Chat.init({
 		type: Sequelize.STRING,
 		allowNull: false,
 		unique: true,
-	},
-	owner_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Users',
-			key: 'id'
-		}
-		// allow null in case user deletes acct
-	},
-	class_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Classes',
-			key: 'id'
-		},
-		allowNull: false,
-	},
-	service_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Services',
-			key: 'id'
-		}
-		// allow null in case unknown service
-	},
+	},	
 }, { sequelize, modelName: 'Chat'});
-
+import User = require('./User');
+import Class = require('./Class');
+import Service = require('./Service');
+Chat.hasOne(User, {
+	foreignKey: {
+		allowNull: false,
+	}
+});
+Chat.hasOne(Class, {
+	foreignKey: {
+		allowNull: false,
+	}
+});
+// allow null in case unknown service
+Chat.hasOne(Service);
 export = Chat;

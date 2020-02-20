@@ -19,27 +19,21 @@ Class.init({
 		allowNull: true,
 		defaultValue: null
 	},
-	course_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Courses',
-			key: 'id'
-		}
-	},
-	room_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Rooms',
-			key: 'id'
-		}
-	},
-	professor_id: {
-		type: Sequelize.INTEGER,
-		references: {
-			model: 'Professors',
-			key: 'id'
-		}
-	}
 }, { sequelize, modelName: 'Class'});
 
+import Course = require('./Course');
+import Room = require('./Room');
+import Professor = require('./Professor');
+Class.hasOne(Course, {
+	foreignKey: {
+		allowNull: false,
+	}
+});
+Class.hasOne(Room);
+Class.hasOne(Professor, {
+	foreignKey: {
+		allowNull: false,
+	}
+});
 export = Class;
+
