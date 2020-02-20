@@ -1,9 +1,9 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../connectors/dbConnector');
+import * as Sequelize from 'sequelize';
+import sequelize = require('../connectors/dbConnector');
 
 class Building extends Sequelize.Model {}
 Building.init({
-	name: Sequelize.STRING 
+	name: Sequelize.STRING,
 }, { sequelize, modelName: 'Building'});
 
-module.exports = Building;
+export = Building;
