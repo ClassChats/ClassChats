@@ -15,4 +15,4 @@ async function routes(fastify: fastify.FastifyInstance, opts, done) {
     done();
 }
 
-module.exports = routes;
+export = routes;

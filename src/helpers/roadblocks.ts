@@ -5,7 +5,7 @@ import fp = require('fastify-plugin');
 /**
  * Require that the logged in user have admin rights. Otherwise, display an error.
  */
-const requireAdmin = fp(function(fastify: fastify.FastifyInstance, opts, done) {
+export const requireAdmin = fp(function(fastify: fastify.FastifyInstance, opts, done) {
     fastify.addHook('onRequest', (request, reply, done) => {
         if (false) {
             ;
@@ -17,5 +17,3 @@ const requireAdmin = fp(function(fastify: fastify.FastifyInstance, opts, done) {
     
     done();
 });
-
-export {requireAdmin};

@@ -2,8 +2,13 @@
 require('dotenv').config();
 
 // Require the framework and instantiate it
-import fastifyModule from 'fastify';
-const fastify = fastifyModule({ logger: true });
+import fastifyFactory from 'fastify';
+const fastify = fastifyFactory({ logger: true });
+
+// Route imports
+import adminRoutes = require('./routes/admin');
+import baseRoutes = require('./routes/base');
+import domainRoutes = require('./routes/domain/domain');
 
 // Other imports
 import { AddressInfo } from 'net';
@@ -21,9 +26,9 @@ fastify.addHook('onRequest', (request, reply, done) => {
 });
 
 // Register base and prefixed routes
-fastify.register(require('./src/routes/base'));
-fastify.register(require('./src/routes/domain/domain'), {prefix: '/:domain'});
-fastify.register(require('./src/routes/admin'), {prefix: '/admin'});
+fastify.register(baseRoutes);
+fastify.register(domainRoutes, {prefix: '/:domain'});
+fastify.register(adminRoutes, {prefix: '/admin'});
 
 
 // Run the server!
