@@ -1,5 +1,5 @@
 const express = require('express');
-const session = require('express-session')
+const session = require('express-session');
 
 const app = express();
 const port = 3000;
@@ -9,15 +9,19 @@ app.use(express.static('public'));
 // Properly handle JSON
 app.use(express.json());
 // Properly handle URL-encoded
-app.use(express.urlencoded({
-    extended: false,
-}));
+app.use(
+    express.urlencoded({
+        extended: false,
+    }),
+);
 // Set up session management
-app.use(session({
-    resave: true,
-    saveUninitialized: true,
-    secret: 'best hackathon team',
-}));
+app.use(
+    session({
+        resave: true,
+        saveUninitialized: true,
+        secret: 'best hackathon team',
+    }),
+);
 // Set the view engine
 app.set('view engine', 'ejs');
 

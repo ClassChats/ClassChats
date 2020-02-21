@@ -1,39 +1,41 @@
-const { exec } = require("child_process");
+const { exec } = require('child_process');
 
-
-function bsToDays(bitstring){
-	var days = "";
-	dayArray=['S','M', 'T', 'W', 'TH', 'F', 'SA']
-	for(var i = 0; i < 7; i++){
-		if(bitstring[i] == '1'){
-			days += dayArray[i]+'/';
-		}
-	}
-	return days.substring(0, days.length-1);
+function bsToDays(bitstring) {
+    var days = '';
+    dayArray = ['S', 'M', 'T', 'W', 'TH', 'F', 'SA'];
+    for (var i = 0; i < 7; i++) {
+        if (bitstring[i] == '1') {
+            days += dayArray[i] + '/';
+        }
+    }
+    return days.substring(0, days.length - 1);
 }
 
-function getChatsForUniversity(domain, callback){
+function getChatsForUniversity(domain, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+    connection.connect();
 
-	connection.connect();
-
-	// do the query
-	// in the callback:
-	// function(err, result)
-	domain = domain.replace('.', '_')
-	connection.query(`
+    // do the query
+    // in the callback:
+    // function(err, result)
+    domain = domain.replace('.', '_');
+    connection.query(
+        `
 		USE ${domain};
-	`, function(err, result){
-		if (err) {callback(err);
-			return
-		}
-		connection.query(`
+	`,
+        function(err, result) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            connection.query(
+                `
 			SELECT Subjects.name as subjectName,
 			Courses.number as courseNumber,
 			LPAD(CONV(Classes.days, 10, 2),7,'0') as daysOfWeek,
@@ -58,50 +60,57 @@ function getChatsForUniversity(domain, callback){
 			LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid
 			LEFT JOIN Chats ON Classes.classid = Chats.classid
 			LEFT JOIN Services ON Chats.serviceid = Services.serviceid
-		`,function(err, result){
-			if(err) {
-				callback(err);
-				return;
-			}
-			for(var i = 0; i < result.length; i++){
-				result[i].daysOfWeek =bsToDays(result[i].daysOfWeek);
-			}
-			callback(null, result);
-		})
-
-	})
+		`,
+                function(err, result) {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        result[i].daysOfWeek = bsToDays(result[i].daysOfWeek);
+                    }
+                    callback(null, result);
+                },
+            );
+        },
+    );
 }
 
-function getChatsForCourse(domain, subject, number, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function getChatsForCourse(domain, subject, number, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
+    connection.connect();
 
-	// do the query
-	// in the callback:
-	// function(err, result)
-	domain = domain.replace('.', '_')
-	connection.query(`
+    // do the query
+    // in the callback:
+    // function(err, result)
+    domain = domain.replace('.', '_');
+    connection.query(
+        `
 		USE ${domain};
-	`, function(err, result){
-		if(err) throw err;
-		connection.query(`
+	`,
+        function(err, result) {
+            if (err) throw err;
+            connection.query(
+                `
 			SELECT courseid FROM Courses
 			LEFT JOIN Subjects
 			ON Courses.subjectid = Subjects.subjectid
 			WHERE Subjects.name = '${subject}' AND Courses.number = '${number}';
-			`, function(err, result) {
-				if (err) throw err;
-				if(result.length == 0){
-					callback(null, []);
-					return;
-				}
-				connection.query(`
+			`,
+                function(err, result) {
+                    if (err) throw err;
+                    if (result.length == 0) {
+                        callback(null, []);
+                        return;
+                    }
+                    connection.query(
+                        `
 					SELECT Subjects.name as subjectName,
 					Courses.number as courseNumber,
 					LPAD(CONV(Classes.days, 10, 2),7,'0') as daysOfWeek,
@@ -127,256 +136,317 @@ function getChatsForCourse(domain, subject, number, callback){
 					LEFT JOIN Chats ON Classes.classid = Chats.classid
 					LEFT JOIN Services ON Chats.serviceid = Services.serviceid
 					WHERE Subjects.name = "${subject}" AND Courses.number = "${number}"
-				`, function(err, result){
-					if(err) throw err;
-					for(var i = 0; i < result.length; i++){
-						result[i].daysOfWeek =bsToDays(result[i].daysOfWeek);
-					}
-					callback(null, result);
-				})
-
-			})
-		//callback(null, result)
-	})
+				`,
+                        function(err, result) {
+                            if (err) throw err;
+                            for (var i = 0; i < result.length; i++) {
+                                result[i].daysOfWeek = bsToDays(
+                                    result[i].daysOfWeek,
+                                );
+                            }
+                            callback(null, result);
+                        },
+                    );
+                },
+            );
+            //callback(null, result)
+        },
+    );
 }
 
-function verifyCredentials(email, password, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function verifyCredentials(email, password, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
+    connection.connect();
 
-	email = email.toLowerCase();
-	connection.query(`
+    email = email.toLowerCase();
+    connection.query(
+        `
 		USE Directory;
-	`, function(err, result){
-		if (err) throw err;
-		connection.query(`
+	`,
+        function(err, result) {
+            if (err) throw err;
+            connection.query(
+                `
 			SELECT COUNT(*) AS count FROM Users
 			WHERE email = "${email}" AND password = "${password}";
 		`,
-		function(err, result){
-			if(err) throw err;
-			let verified = (result[0]['count'] != 0); 
-			callback(null, verified)
-		})
-	})
+                function(err, result) {
+                    if (err) throw err;
+                    let verified = result[0]['count'] != 0;
+                    callback(null, verified);
+                },
+            );
+        },
+    );
 }
 
-function getUserUniversity(username, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function getUserUniversity(username, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
+    connection.connect();
 
-	connection.query(`
+    connection.query(
+        `
 		USE Directory;
-	`, function(err, result){
-		if(err) throw err;
-		connection.query(`
+	`,
+        function(err, result) {
+            if (err) throw err;
+            connection.query(
+                `
 			SELECT Schools.domain, Schools.name FROM 
 			Users LEFT JOIN Schools 
 			ON Users.schoolid = Schools.schoolid
-		`, function(err, result){
-			if(err) throw err;
-			console.log(result[0]);
-			callback(null, result);
-		})
-	})
+		`,
+                function(err, result) {
+                    if (err) throw err;
+                    console.log(result[0]);
+                    callback(null, result);
+                },
+            );
+        },
+    );
 }
 
-function createAccount(username, password, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function createAccount(username, password, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
-	let verifyHash = Math.floor(100000 + Math.random() * 900000).toString(10);
-	connection.query(`
+    connection.connect();
+    let verifyHash = Math.floor(100000 + Math.random() * 900000).toString(10);
+    connection.query(
+        `
 		INSERT INTO Directory.Users(email, password, verifyHash) 
 		VALUES ("${username}", "${password}", "${verifyHash}");
-	`, function(err, result) {
-		if (err) return callback(err);
-		exec(`php email.php ${username} ${verifyHash}`);
-		callback(null, result)
-	})
-
+	`,
+        function(err, result) {
+            if (err) return callback(err);
+            exec(`php email.php ${username} ${verifyHash}`);
+            callback(null, result);
+        },
+    );
 }
 
-function verify(username, vCode, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function verify(username, vCode, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
+    connection.connect();
 
-	connection.query(`
+    connection.query(
+        `
 		SELECT COUNT(*) AS count 
 		FROM Directory.Users 
 		WHERE email="${username}" AND verifyHash="${vCode}";
-	`, function(err, result){
-		if(err) {
-			callback(err);
-			return;
-		}
-		
-		if(result[0]['count'] != 0){
-			connection.query(`
+	`,
+        function(err, result) {
+            if (err) {
+                callback(err);
+                return;
+            }
+
+            if (result[0]['count'] != 0) {
+                connection.query(
+                    `
 				UPDATE Directory.Users 
 				SET verified=1, verifyHash=NULL
 				WHERE email="${username}";
-			`, function(err, result){
-				if(err) {
-					callback(err);
-					return;
-				}
-				
-				var psl = require('psl');
-				var parsed = psl.parse(username.split('@')[1]);
-				domain = parsed.domain;
-				connection.query(`
+			`,
+                    function(err, result) {
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+
+                        var psl = require('psl');
+                        var parsed = psl.parse(username.split('@')[1]);
+                        domain = parsed.domain;
+                        connection.query(
+                            `
 					INSERT IGNORE INTO Directory.Schools(domain)
 					VALUES ("${domain}");
-				`, function(err, result) {
-					if (err) {
-						callback(err);
-						return;
-					}
-					
-					connection.query(`
+				`,
+                            function(err, result) {
+                                if (err) {
+                                    callback(err);
+                                    return;
+                                }
+
+                                connection.query(
+                                    `
 						UPDATE Directory.Users
 						SET schoolid = (SELECT schoolid FROM Directory.Schools WHERE domain = '${domain}')
 						WHERE email = '${username}';
-					`, function(err, result) {
-						if (err) {
-							callback(err);
-							return;
-						}
-						callback(null, true);
-					});
-				});
-			});
-		}
-		else{
-			callback('More than one user was found for this -- this should not happen.');
-		}
-	});
+					`,
+                                    function(err, result) {
+                                        if (err) {
+                                            callback(err);
+                                            return;
+                                        }
+                                        callback(null, true);
+                                    },
+                                );
+                            },
+                        );
+                    },
+                );
+            } else {
+                callback(
+                    'More than one user was found for this -- this should not happen.',
+                );
+            }
+        },
+    );
 }
 
-function isUniversityNew(domain, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function isUniversityNew(domain, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
-	connection.query(`
+    connection.connect();
+    connection.query(
+        `
 		SELECT COUNT(*) AS count
 		FROM Directory.Schools 
 		WHERE domain="${domain}"
 		AND name IS NULL;
-	`, function(err, result){
-		if(err) throw err;
-		//console.log(result)
-		callback(null, result[0]['count'] != 0);
-	})
+	`,
+        function(err, result) {
+            if (err) throw err;
+            //console.log(result)
+            callback(null, result[0]['count'] != 0);
+        },
+    );
 }
 
-function createUniversity(domain, universityName, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function createUniversity(domain, universityName, callback) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	connection.connect();
-	connection.query(`
+    connection.connect();
+    connection.query(
+        `
 		UPDATE Directory.Schools 
 		SET name="${universityName}"
 		WHERE domain="${domain}" AND name IS NULL;
-	`, callback);	
+	`,
+        callback,
+    );
 }
 
-
-function getServiceByURL(link){
-	const url = require('url');
-	var parsed = url.parse(link);
-	var hostname = parsed.hostname;
-	var psl = require('psl');
-	var domain = psl.parse(hostname).domain
-	if(domain == 't.me'){
-		return 'telegram';
-	}
-	else if(domain=='whatsapp.com'){
-		return 'whatsapp';
-	}
-	else{
-		return 'messenger';
-	}
+function getServiceByURL(link) {
+    const url = require('url');
+    var parsed = url.parse(link);
+    var hostname = parsed.hostname;
+    var psl = require('psl');
+    var domain = psl.parse(hostname).domain;
+    if (domain == 't.me') {
+        return 'telegram';
+    } else if (domain == 'whatsapp.com') {
+        return 'whatsapp';
+    } else {
+        return 'messenger';
+    }
 }
 
-function addChat(subject, courseNumber, section, startTime, days, roomNumber, building, professor, link, domain, username, callback){
-	var mysql      = require('mysql');
-	var connection = mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'dbuser',
-	  password : 'password',
-	});
+function addChat(
+    subject,
+    courseNumber,
+    section,
+    startTime,
+    days,
+    roomNumber,
+    building,
+    professor,
+    link,
+    domain,
+    username,
+    callback,
+) {
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'dbuser',
+        password: 'password',
+    });
 
-	domain = domain.replace('.','_');
-	connection.query(`
+    domain = domain.replace('.', '_');
+    connection.query(
+        `
 		USE ${domain};
-	`, function(err, result){
-		if(err) return callback(err);
-		connection.query(`
+	`,
+        function(err, result) {
+            if (err) return callback(err);
+            connection.query(
+                `
 			INSERT IGNORE INTO Buildings(name)
 			VALUES ("${building}");
-		`, function(err, result){
-			if(err) return callback(err);
-			connection.query(`
+		`,
+                function(err, result) {
+                    if (err) return callback(err);
+                    connection.query(
+                        `
 				INSERT IGNORE INTO Rooms(number, buildingid)
 				SELECT "${roomNumber}", buildingid
 				FROM Buildings 
 				WHERE Buildings.name = "${building}";
-			`, function(err, result){
-				if(err) return callback(err);
-				connection.query(`
+			`,
+                        function(err, result) {
+                            if (err) return callback(err);
+                            connection.query(
+                                `
 					INSERT IGNORE INTO Subjects(name)
 					VALUES ("${subject}");
-				`, function(err, result){
-					if(err) return callback(err);
-					connection.query(`
+				`,
+                                function(err, result) {
+                                    if (err) return callback(err);
+                                    connection.query(
+                                        `
 						INSERT IGNORE INTO Courses(number, subjectid)
 						SELECT "${courseNumber}", subjectid
 						FROM Subjects 
 						WHERE Subjects.name = "${subject}";
-					`, function(err, result){
-						if(err) return callback(err);
-						connection.query(`
+					`,
+                                        function(err, result) {
+                                            if (err) return callback(err);
+                                            connection.query(
+                                                `
 							INSERT IGNORE INTO Professors(name)
 							VALUES ("${professor}");
-						`, function(err, result){
-							if(err) return callback(err);
+						`,
+                                                function(err, result) {
+                                                    if (err)
+                                                        return callback(err);
 
-							//console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
-							connection.query(`
+                                                    //console.log(courseNumber, section, startTime, days, roomNumber, building, professor, link, domain)
+                                                    connection.query(
+                                                        `
 								INSERT IGNORE INTO Classes(courseid, section, startTime, days, roomid, professorid)
 								SELECT (SELECT courseid FROM Courses LEFT JOIN Subjects on Courses.subjectid=Subjects.subjectid WHERE name="${subject}" AND number="${courseNumber}") as courseid,
 								"${section}" as section,
@@ -384,10 +454,17 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 								${days} as days,
 								(SELECT roomid FROM Rooms LEFT JOIN Buildings ON Rooms.buildingid = Buildings.buildingid WHERE name="${building}" AND number="${roomNumber}" ) AS roomid,
 								(SELECT professorid FROM Professors WHERE name = "${professor}") AS professorid;
-							`, function(err, result){
-								if(err) return callback(err);
-								var serviceName = getServiceByURL(link);
-								connection.query(`
+							`,
+                                                        function(err, result) {
+                                                            if (err)
+                                                                return callback(
+                                                                    err,
+                                                                );
+                                                            var serviceName = getServiceByURL(
+                                                                link,
+                                                            );
+                                                            connection.query(
+                                                                `
 									INSERT INTO Chats(classid, userid, link, serviceid)
 									SELECT (SELECT classid 
 									FROM Classes 
@@ -407,20 +484,32 @@ function addChat(subject, courseNumber, section, startTime, days, roomNumber, bu
 									(SELECT userid FROM Directory.Users WHERE email="${username}"),
 									"${link}",
 									(SELECT serviceid FROM Services WHERE name="${serviceName}") 
-								`, function(err, result){
-									if(err) return callback(err);
-								})
-							})
-						})
-					})
-				})
-			})
-		})
-	})
-
-
+								`,
+                                                                function(
+                                                                    err,
+                                                                    result,
+                                                                ) {
+                                                                    if (err)
+                                                                        return callback(
+                                                                            err,
+                                                                        );
+                                                                },
+                                                            );
+                                                        },
+                                                    );
+                                                },
+                                            );
+                                        },
+                                    );
+                                },
+                            );
+                        },
+                    );
+                },
+            );
+        },
+    );
 }
-
 
 // on their side...
 /*
@@ -473,14 +562,14 @@ getChatsForCourse('cuny.edu','CSCI','320', function(err, result){
 */
 
 module.exports = {
-	getChatsForCourse,
-	verifyCredentials,
-	getUserUniversity,
-	createAccount,
-	verify,
-	isUniversityNew,
-	createUniversity,
-	getServiceByURL,
-	addChat,
-	getChatsForUniversity,
-}
+    getChatsForCourse,
+    verifyCredentials,
+    getUserUniversity,
+    createAccount,
+    verify,
+    isUniversityNew,
+    createUniversity,
+    getServiceByURL,
+    addChat,
+    getChatsForUniversity,
+};
