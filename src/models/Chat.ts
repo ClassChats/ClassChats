@@ -12,16 +12,16 @@ Chat.init({
 import User = require('./User');
 import Class = require('./Class');
 import Service = require('./Service');
-Chat.hasOne(User, {
+Chat.belongsTo(User, {
 	foreignKey: {
 		allowNull: false,
 	}
 });
-Chat.hasOne(Class, {
+Chat.belongsTo(Class, {
 	foreignKey: {
 		allowNull: false,
 	}
 });
 // allow null in case unknown service
-Chat.hasOne(Service);
+Chat.belongsTo(Service);
 export = Chat;

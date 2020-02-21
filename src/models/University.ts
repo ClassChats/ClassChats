@@ -38,5 +38,5 @@ University.init({
 // Any user belonging to a university can access any other university in the same
 // university group.
 import UniversityGroup = require('./UniversityGroup');
-University.hasOne(UniversityGroup);
+University.belongsTo(UniversityGroup);
 export = University;

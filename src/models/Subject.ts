@@ -12,7 +12,7 @@ Subject.init({
 	university in the dropdown menu
 */
 import University = require('./University');
-Subject.hasOne(University, {
+Subject.belongsTo(University, {
 	foreignKey: {
 		allowNull: false,
 	}

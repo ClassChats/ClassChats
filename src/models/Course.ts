@@ -8,16 +8,17 @@ Course.init({
 		allowNull: false,
 	},
 }, { sequelize, modelName: 'Course'});
+
 import Subject = require('./Subject');
 import University = require('./University');
-Course.hasOne(Subject, {
+Course.belongsTo(Subject, {
 	foreignKey: {
 		allowNull: false,
 	}
 });
 
 // To ensure that autofill only shows suggestions for that particular university.
-Course.hasOne(University, {
+Course.belongsTo(University, {
 	foreignKey: {
 		allowNull: false,
 	}

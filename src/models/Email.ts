@@ -17,7 +17,7 @@ Email.init({
 	},
 }, { sequelize, modelName: 'Email'});
 import User = require('./User');
-Email.hasOne(User, {
+Email.belongsTo(User, {
 	foreignKey: {
 		allowNull: false,
 	}
