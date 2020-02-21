@@ -24,13 +24,13 @@ Class.init({
 import Course = require('./Course');
 import Room = require('./Room');
 import Professor = require('./Professor');
-Class.hasOne(Course, {
+Class.belongsTo(Course, {
 	foreignKey: {
 		allowNull: false,
 	}
 });
-Class.hasOne(Room);
-Class.hasOne(Professor, {
+Class.belongsTo(Room);
+Class.belongsTo(Professor, {
 	foreignKey: {
 		allowNull: false,
 	}

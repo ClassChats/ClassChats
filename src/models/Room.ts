@@ -13,6 +13,6 @@ Room.init({
 	},
 }, { sequelize, modelName: 'Room'});
 
-import Building = require('./Subject');
-Room.hasOne(Building)
+import Building = require('./Building');
+Room.belongsTo(Building)
 export = Room;
