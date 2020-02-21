@@ -34,7 +34,7 @@ fastify.register(adminRoutes, {prefix: '/admin'});
 // Run the server!
 async function start() {
     try {
-        await fastify.listen(3000);
+        await fastify.listen(3000, '0.0.0.0');
         fastify.log.info(`server listening on ${(fastify.server.address() as AddressInfo).port}`);
     } catch (err) {
         fastify.log.error(err);
