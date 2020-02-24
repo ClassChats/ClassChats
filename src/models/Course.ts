@@ -7,7 +7,7 @@ Course.init({
 		type: Sequelize.STRING,
 		allowNull: false,
 	},
-}, { sequelize, modelName: 'Course'});
+}, { sequelize, modelName: 'course'});
 
 import Subject = require('./Subject');
 import University = require('./University');

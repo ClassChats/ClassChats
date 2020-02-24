@@ -4,7 +4,7 @@ import sequelize = require('../connectors/dbConnector');
 class Subject extends Sequelize.Model {}
 Subject.init({
 	name: Sequelize.STRING,
-}, { sequelize, modelName: 'Subject'});
+}, { sequelize, modelName: 'subject'});
 
 /*
 	reference university  bc we  want  to show

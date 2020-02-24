@@ -33,7 +33,7 @@ University.init({
 		defaultValue: false,
 		allowNull: false,
 	},
-}, { sequelize, modelName: 'University'});
+}, { sequelize, modelName: 'university'});
 
 // Any user belonging to a university can access any other university in the same
 // university group.

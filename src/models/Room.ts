@@ -11,7 +11,7 @@ Room.init({
 	coordinates: {
 		type: Sequelize.GEOMETRY('POINT'),
 	},
-}, { sequelize, modelName: 'Room'});
+}, { sequelize, modelName: 'room'});
 
 import Building = require('./Building');
 Room.belongsTo(Building)

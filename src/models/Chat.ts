@@ -8,7 +8,7 @@ Chat.init({
 		allowNull: false,
 		unique: true,
 	},	
-}, { sequelize, modelName: 'Chat'});
+}, { sequelize, modelName: 'chat'});
 import User = require('./User');
 import Class = require('./Class');
 import Service = require('./Service');

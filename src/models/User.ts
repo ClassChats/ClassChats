@@ -5,6 +5,6 @@ class User extends Sequelize.Model {}
 User.init({
 	password: Sequelize.STRING,
 	salt: Sequelize.STRING,
-}, { sequelize, modelName: 'User'});
+}, { sequelize, modelName: 'user'});
 
 export = User;

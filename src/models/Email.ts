@@ -15,7 +15,7 @@ Email.init({
 		// ago, send a new email and switch teh cerify code.
 		type: Sequelize.STRING,
 	},
-}, { sequelize, modelName: 'Email'});
+}, { sequelize, modelName: 'email'});
 import User = require('./User');
 Email.belongsTo(User, {
 	foreignKey: {

@@ -19,7 +19,7 @@ Class.init({
 		allowNull: true,
 		defaultValue: null
 	},
-}, { sequelize, modelName: 'Class'});
+}, { sequelize, modelName: 'class'});
 
 import Course = require('./Course');
 import Room = require('./Room');
