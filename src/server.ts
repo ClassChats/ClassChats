@@ -21,21 +21,24 @@ fastify.addHook('onRequest', (request, reply, done) => {
         const newUrl = request.req.url!.replace(/\/+$/, '') === '' ? '/' : '';
         reply.redirect(301, newUrl);
     }
-    
+
     done();
 });
 
 // Register base and prefixed routes
 fastify.register(baseRoutes);
-fastify.register(domainRoutes, {prefix: '/:domain'});
-fastify.register(adminRoutes, {prefix: '/admin'});
-
+fastify.register(domainRoutes, { prefix: '/:domain' });
+fastify.register(adminRoutes, { prefix: '/admin' });
 
 // Run the server!
 async function start() {
     try {
         await fastify.listen(3000, '0.0.0.0');
-        fastify.log.info(`server listening on ${(fastify.server.address() as AddressInfo).port}`);
+        fastify.log.info(
+            `server listening on ${
+                (fastify.server.address() as AddressInfo).port
+            }`,
+        );
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);

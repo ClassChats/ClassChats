@@ -9,7 +9,7 @@ async function routes(app, opts, done) {
             domain: request.params.domain,
         };
     });
-    
+
     done();
 }
 

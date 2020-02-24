@@ -1,5 +1,5 @@
 /**
- * A single module that imports and re-exports all of the models. This registers the 
+ * A single module that imports and re-exports all of the models. This registers the
  * models woth Sequelize and also makes them available in one module.
  */
 

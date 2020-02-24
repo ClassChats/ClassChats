@@ -5,13 +5,13 @@ import * as roadblocks from '../helpers/roadblocks';
 async function routes(fastify: fastify.FastifyInstance, opts, done) {
     // Require administrator privileges to access this area.
     fastify.register(roadblocks.requireAdmin);
-    
+
     fastify.get('/', async (request, reply) => {
         return {
             type: 'admin',
         };
     });
-    
+
     done();
 }
 
