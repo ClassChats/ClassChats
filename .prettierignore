@@ -2,5 +2,6 @@
 /build/
 
 /package*.json
+/tsconfig.json
 
 .env
