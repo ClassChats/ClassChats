@@ -8,9 +8,9 @@
  * - Send the email to the user
  */
 
-import * as fastify from 'fastify';
 import * as bcrypt from 'bcrypt';
-import * as models from '../models/models'
+import * as fastify from 'fastify';
+import * as models from '../models/models';
 
 /**
  * Handle a signup request.
@@ -24,7 +24,7 @@ export async function handler(request: fastify.FastifyRequest) {
     
     // Create a new User in the DB
     const user = await models.User.create({
-        password: hash
+        password: hash,
     });
     
     // Create the associated email entry
