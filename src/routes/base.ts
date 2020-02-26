@@ -1,5 +1,6 @@
 // Define the top-level routes.
 import * as fastify from 'fastify';
+import * as defaultTest from '../accessors/defaultPage'
 
 async function routes(app: fastify.FastifyInstance, opts, done) {
     // Homepage
@@ -29,7 +30,13 @@ async function routes(app: fastify.FastifyInstance, opts, done) {
             payload: request.body,
         };
     });
-
+    
+    app.get('/defaultTest', async(request: fastify.FastifyRequest, reply) => {
+        return {
+            type: 'default test',
+            result: defaultTest.defaultResults()
+        }
+    });
     done();
 }
 
