@@ -9,7 +9,7 @@ UniversityGroup.init(
             unique: true,
         },
     },
-    { sequelize, modelName: 'universityGroup' },
+    { sequelize, modelName: 'universitygroup' },
 );
 
 export = UniversityGroup;

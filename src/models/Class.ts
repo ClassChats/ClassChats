@@ -33,6 +33,7 @@ Class.belongsTo(Course, {
     },
 });
 Class.belongsTo(Room);
+Room.hasMany(Class);
 Class.belongsTo(Professor, {
     foreignKey: {
         allowNull: false,

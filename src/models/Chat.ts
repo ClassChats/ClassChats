@@ -25,6 +25,7 @@ Chat.belongsTo(Class, {
         allowNull: false,
     },
 });
+Class.hasMany(Chat);
 // allow null in case unknown service
 Chat.belongsTo(Service);
 export = Chat;

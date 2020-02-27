@@ -17,5 +17,7 @@ Room.init(
 );
 
 import Building = require('./Building');
+import Class = require('./Class');
 Room.belongsTo(Building);
+//Room.hasMany(Class);
 export = Room;

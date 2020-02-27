@@ -1,6 +1,7 @@
 // Define the top-level routes.
 import * as fastify from 'fastify';
 import * as defaultTest from '../accessors/defaultPage'
+import { handler } from '../handlers/signup';
 
 async function routes(app: fastify.FastifyInstance, opts, done) {
     // Homepage
@@ -25,6 +26,10 @@ async function routes(app: fastify.FastifyInstance, opts, done) {
     });
 
     app.post('/signup', async (request: fastify.FastifyRequest, reply) => {
+        if(request.body.email == null){
+            return {};
+        }
+        await handler(request);
         return {
             type: 'signup page',
             payload: request.body,
@@ -33,8 +38,9 @@ async function routes(app: fastify.FastifyInstance, opts, done) {
     
     app.get('/defaultTest', async(request: fastify.FastifyRequest, reply) => {
         return {
-            type: 'default test',
-            result: defaultTest.defaultResults()
+            type: 'default test with alias',
+            hostnameAlias: request.query.hostnameAlias,
+            result: await (defaultTest.defaultResults(request.query.hostnameAlias))
         }
     });
     done();
