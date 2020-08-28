@@ -1,4 +1,7 @@
-/node_modules/
-/build/
+node_modules/
+
+# Keep the build folder but nothing inside it
+build/*
+!build/.gitkeep
 
 .env
