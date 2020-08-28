@@ -2,7 +2,7 @@
 # /.github/workflows/label.yaml
 
 # area/ labels
-area/backend: src/backend/*
-area/database: src/db/*
-area/ci: .github/*
-area/frontend: site/*
+area/backend: src/backend/**/*
+area/database: src/db/**/*
+area/ci: .github/**/*
+area/frontend: site/**/*
