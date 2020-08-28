@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JHACKS2020Winners/ClassChats.git"
+    "url": "git+https://github.com/ClassChats/ClassChats.git"
   },
   "author": "JHACKS2020Winners",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JHACKS2020Winners/ClassChats/issues"
+    "url": "https://github.com/ClassChats/ClassChats/issues"
   },
-  "homepage": "https://github.com/JHACKS2020Winners/ClassChats#readme",
+  "homepage": "https://github.com/ClassChats/ClassChats#readme",
   "dependencies": {
     "bcrypt": "^4.0.0",
     "dotenv": "^8.2.0",
@@ -28,11 +28,17 @@
     "fastify": "^2.12.0",
     "fastify-plugin": "^1.6.0",
     "mysql2": "^2.1.0",
-    "sequelize": "^5.21.4"
+    "sequelize": "^6.3.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
-    "@types/node": "^13.7.4",
-    "prettier": "^1.19.1"
+    "@types/bluebird": "^3.5.32",
+    "@types/node": "^13.13.15",
+    "@types/validator": "^13.1.0",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.7.0",
+    "prettier": "^1.19.1",
+    "typescript": "^4.0.2"
   }
 }
