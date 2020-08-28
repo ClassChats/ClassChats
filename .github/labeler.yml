@@ -1,0 +1,8 @@
+# This is the set of rules that determins how issues and PRs get automatically labeled by
+# /.github/workflows/label.yaml
+
+# area/ labels
+area/backend: src/backend/*
+area/database: src/db/*
+area/ci: .github/*
+area/frontend: site/*
