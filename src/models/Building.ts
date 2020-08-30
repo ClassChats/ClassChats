@@ -11,8 +11,8 @@ Building.init(
 );
 
 Building.belongsTo(University, {
-	foreignKey: {
-		allowNull: false,
-	}
+    foreignKey: {
+        allowNull: false,
+    },
 });
 export = Building;

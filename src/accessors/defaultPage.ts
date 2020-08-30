@@ -1,19 +1,22 @@
 import Sequelize = require('sequelize');
-const { Op } = require("sequelize");
+const { Op } = require('sequelize');
 require('dotenv').config();
 import sequelize = require('../connectors/dbConnector');
 //import * as fastify from 'fastify';
-import * as models from '../models/models'
+import * as models from '../models/models';
 
-export async function defaultResults(hostnameAlias: string, offset: number = 0) {
-    let uni_id = (await models.University.findOne({
+export async function defaultResults(
+    hostnameAlias: string,
+    offset: number = 0,
+) {
+    let uni_id = await models.University.findOne({
         where: {
-            hostnameAlias: hostnameAlias
-        }
-    }));
+            hostnameAlias: hostnameAlias,
+        },
+    });
 
-    if(uni_id == null){
-        return []
+    if (uni_id == null) {
+        return [];
     }
     uni_id = uni_id.id;
 
@@ -23,7 +26,7 @@ export async function defaultResults(hostnameAlias: string, offset: number = 0) 
             {
                 model: models.Building,
                 where: {
-                    UniversityId: uni_id
+                    UniversityId: uni_id,
                 },
             },
             {
@@ -37,19 +40,18 @@ export async function defaultResults(hostnameAlias: string, offset: number = 0) 
                     }
                 ]
                 */
-            }
+            },
         ],
         offset: offset,
-        limit: 5
+        limit: 5,
     });
     let result = [] as Object[];
-    for(let i =0; i < rooms.length; i++){
+    for (let i = 0; i < rooms.length; i++) {
         result.push({
             roomId: rooms[i].id,
             buildingName: rooms[i].building.name,
-            roomNumber: rooms[i].number
+            roomNumber: rooms[i].number,
         });
     }
     return result;
 }
-
