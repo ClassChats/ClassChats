@@ -3,13 +3,13 @@ import { FastifyInstance } from './types';
 
 // All routes will be prefixed with `/universities` when registered by the main app
 async function routes(fastify: FastifyInstance, options) {
-    fastify.get('/', async (request, reply) => {
+    fastify.get('/v1/universities/:universityID', async (request, reply) => {
         const universities = await fastify.db.models.University.findAll();
         return universities;
     });
 
     fastify.put(
-        '/',
+        '/v1/universities/',
         {
             schema: {
                 body: {
@@ -26,6 +26,7 @@ async function routes(fastify: FastifyInstance, options) {
             return universities;
         },
     );
+
 }
 
 export = routes;
