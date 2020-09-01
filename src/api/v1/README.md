@@ -2,12 +2,15 @@
 
 ## Endpoints
 
-- /universities/:domain
-  - /departments
-    - /:abbreviation or /:departmentID
-      - /courses
-        - /:number or /:courseID
-          - /classes
+- /universities
+  - ?name
+  - ?domain
+  - /:universityID
+    - /departments
+      - /:abbreviation or /:departmentID
+        - /courses
+          - /:number or /:courseID
+            - /classes
 
   - /chats
     - /:chatID
