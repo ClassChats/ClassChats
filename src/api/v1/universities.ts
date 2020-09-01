@@ -1,4 +1,4 @@
-import { FastifyInstance, GoodReply } from './types';
+import { FastifyInstance, GoodReply, Reply, BadReply } from './types';
 import { Op } from 'sequelize';
 
 // Types
@@ -64,10 +64,17 @@ async function routes(fastify: FastifyInstance, options) {
     fastify.route({
         method: 'GET',
         url: '/:universityID',
-        handler: async (request, reply): Promise<GoodReply> => {
+        handler: async (request, reply): Promise<Reply> => {
             const dbUniversity = await fastify.db.models.University.findByPk(
                 request.params.universityID,
             );
+            if (dbUniversity === null) {
+                reply.status(404);
+                return {
+                    ok: false,
+                    reason: 'No university exists with that ID.',
+                };
+            }
 
             // Format the results
             const university: UniversityResult = {
