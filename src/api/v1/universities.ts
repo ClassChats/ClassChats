@@ -27,12 +27,12 @@ async function routes(fastify: FastifyInstance, options) {
         handler: async (request, reply): Promise<GoodReply> => {
             // WHERE clause for the query
             const where = {};
-            if ('name' in request.query && request.query.name) {
+            if (request.query.name) {
                 where.name = {
                     [Op.eq]: request.query.name,
                 };
             }
-            if ('domain' in request.query && request.query.domain) {
+            if (request.query.domain) {
                 where.domain = {
                     [Op.eq]: request.query.domain,
                 };
