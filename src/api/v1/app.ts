@@ -8,7 +8,7 @@ fastify.decorate('db', sequelize);
 
 // Register routes
 const routes = {
-    universities: require('./routes/universities'),
+    universities: require('./universities'),
 };
 
 fastify.register(routes.universities, {
