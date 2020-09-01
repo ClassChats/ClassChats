@@ -90,24 +90,74 @@ async function routes(fastify: FastifyInstance, options) {
         },
     });
 
-    fastify.put(
-        '/',
-        {
-            schema: {
-                body: {
-                    name: 'string',
-                    domain: 'string',
+    // Create a university and return it.
+    fastify.route({
+        method: 'POST',
+        url: '/',
+        schema: {
+            body: {
+                properties: {
+                    name: {
+                        type: 'string',
+                    },
+                    domain: {
+                        type: 'string',
+                    },
                 },
+                required: ['name', 'domain'],
             },
         },
-        async (request, reply) => {
-            const universities = await fastify.db.models.University.create({
+        preValidation: async (request, reply) => {
+            if (!(request.body.name && request.body.domain)) {
+                const message: BadReply = {
+                    ok: false,
+                    reason: "Missing required property 'name' or 'domain'",
+                };
+                reply.status(400).send(message);
+            }
+        },
+        handler: async (request, reply): Promise<GoodReply> => {
+            const dbUniversity = await fastify.db.models.University.create({
                 name: request.body.name,
                 domain: request.body.domain,
             });
-            return universities;
+
+            const university: UniversityResult = {
+                id: dbUniversity.id,
+                name: dbUniversity.name,
+                domain: dbUniversity.domain,
+            };
+
+            return {
+                ok: true,
+                result: university,
+            };
         },
-    );
+    });
+
+    // Delete a university by its ID.
+    fastify.route({
+        method: 'DELETE',
+        url: '/:universityID',
+        handler: async (request, reply): Promise<Reply> => {
+            const dbUniversity = await fastify.db.models.University.findByPk(
+                request.params.universityID,
+            );
+            if (dbUniversity === null) {
+                reply.status(404);
+                return {
+                    ok: false,
+                    reason: 'No university exists with that ID.',
+                };
+            }
+
+            dbUniversity.destroy();
+
+            return {
+                ok: true,
+            };
+        },
+    });
 }
 
 export = routes;

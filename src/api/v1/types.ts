@@ -18,7 +18,7 @@ export type Reply = GoodReply | BadReply;
  */
 export interface GoodReply {
     ok: true;
-    result: unknown;
+    result?: unknown;
 }
 
 /**
