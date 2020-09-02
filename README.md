@@ -6,7 +6,7 @@ Proposed Stack:
 -   Language: TypeScript
 -   ORM: Sequelize
 -   DBMS: MySQL
--   Front-End Framework: React?
+-   Front-End Framework: Vue?
 
 # Development
 
@@ -30,7 +30,7 @@ With both installed, simply run `./rundocker.sh`. This does the following:
 need to (i.e. by running `node some_file.js`)
 
 You can exit the shell and the containers will continue running; just run `./rundocker.sh` again to re-enter.  
-To stop the containers, run `docker-compose down`.
+To stop the containers, run `docker-compose stop`.
 
 ## Formatting
 
