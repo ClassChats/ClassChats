@@ -5,7 +5,7 @@ import fp = require('fastify-plugin');
 /**
  * Require that the logged in user have admin rights. Otherwise, display an error.
  */
-export const requireAdmin = fp(function(
+export const requireAdmin = fp(function (
     fastify: fastify.FastifyInstance,
     opts,
     done,
