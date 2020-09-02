@@ -151,5 +151,4 @@ sequelize
         console.error('Unable to create models:', err);
     });
 
-// Export the Sequelize instance
 export = sequelize;
