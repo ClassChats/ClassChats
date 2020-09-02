@@ -1,11 +1,70 @@
 import { FastifyInstance, GoodReply, Reply, BadReply } from './types';
-import { Op } from 'sequelize';
+import { Op, Model } from 'sequelize';
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { ServerResponse } from 'http';
 
 // Types
-interface UniversityResult {
+class UniversityResult {
     id: number;
     name: string;
     domain: string;
+
+    /**
+     * Creates a `UniversityResult` from a university `Model`.
+     */
+    constructor(university: Model) {
+        this.id = university.id;
+        this.name = university.name;
+        this.domain = university.domain;
+    }
+}
+
+// Constants
+const SCHEMAS = {
+    body: {
+        properties: {
+            name: {
+                type: 'string',
+            },
+            domain: {
+                type: 'string',
+            },
+        },
+        required: ['name', 'domain'],
+    },
+    querystring: {
+        name: {
+            type: 'string',
+        },
+        domain: {
+            type: 'string',
+        },
+    },
+};
+
+const MESSAGES: { [key: string]: Reply } = {
+    noUniversityForID: {
+        ok: false,
+        reason: 'No university exists with that ID.',
+    },
+};
+
+// Helper functions
+/**
+ * A reusable helper function that can be used as a value to `preValidation`. Checks that the body has
+ * non-empty `name` and `domain` properties.
+ */
+async function validateBody(
+    request: FastifyRequest,
+    reply: FastifyReply<ServerResponse>,
+): Promise<BadReply | undefined> {
+    if (!(request.body.name && request.body.domain)) {
+        reply.status(400);
+        return {
+            ok: false,
+            reason: "Missing required property 'name' or 'domain'",
+        };
+    }
 }
 
 // Routes
@@ -15,14 +74,7 @@ async function routes(fastify: FastifyInstance, options) {
         method: 'GET',
         url: '/',
         schema: {
-            querystring: {
-                name: {
-                    type: 'string',
-                },
-                domain: {
-                    type: 'string',
-                },
-            },
+            querystring: SCHEMAS.querystring,
         },
         handler: async (request, reply): Promise<GoodReply> => {
             // WHERE clause for the query
@@ -46,11 +98,7 @@ async function routes(fastify: FastifyInstance, options) {
             // Format the results
             const universities: UniversityResult[] = []; // The result
             for (const dbUniversity of dbUniversities) {
-                universities.push({
-                    id: dbUniversity.id,
-                    name: dbUniversity.name,
-                    domain: dbUniversity.domain,
-                });
+                universities.push(new UniversityResult(dbUniversity));
             }
 
             return {
@@ -65,27 +113,17 @@ async function routes(fastify: FastifyInstance, options) {
         method: 'GET',
         url: '/:universityID',
         handler: async (request, reply): Promise<Reply> => {
-            const dbUniversity = await fastify.db.models.University.findByPk(
+            const university = await fastify.db.models.University.findByPk(
                 request.params.universityID,
             );
-            if (dbUniversity === null) {
+            if (university === null) {
                 reply.status(404);
-                return {
-                    ok: false,
-                    reason: 'No university exists with that ID.',
-                };
+                return MESSAGES.noUniversityForID;
             }
-
-            // Format the results
-            const university: UniversityResult = {
-                id: dbUniversity.id,
-                name: dbUniversity.name,
-                domain: dbUniversity.domain,
-            };
 
             return {
                 ok: true,
-                result: university,
+                result: new UniversityResult(university),
             };
         },
     });
@@ -95,42 +133,48 @@ async function routes(fastify: FastifyInstance, options) {
         method: 'POST',
         url: '/',
         schema: {
-            body: {
-                properties: {
-                    name: {
-                        type: 'string',
-                    },
-                    domain: {
-                        type: 'string',
-                    },
-                },
-                required: ['name', 'domain'],
-            },
+            body: SCHEMAS.body,
         },
-        preValidation: async (request, reply) => {
-            if (!(request.body.name && request.body.domain)) {
-                const message: BadReply = {
-                    ok: false,
-                    reason: "Missing required property 'name' or 'domain'",
-                };
-                reply.status(400).send(message);
-            }
-        },
+        preValidation: validateBody,
         handler: async (request, reply): Promise<GoodReply> => {
-            const dbUniversity = await fastify.db.models.University.create({
+            const university = await fastify.db.models.University.create({
                 name: request.body.name,
                 domain: request.body.domain,
             });
 
-            const university: UniversityResult = {
-                id: dbUniversity.id,
-                name: dbUniversity.name,
-                domain: dbUniversity.domain,
+            reply.status(201);
+            return {
+                ok: true,
+                result: new UniversityResult(university),
             };
+        },
+    });
+
+    // Update a university by its ID.
+    fastify.route({
+        method: 'PUT',
+        url: '/:universityID',
+        schema: {
+            body: SCHEMAS.body,
+        },
+        preValidation: validateBody,
+        handler: async (request, reply): Promise<Reply> => {
+            let university = await fastify.db.models.University.findByPk(
+                request.params.universityID,
+            );
+            if (university === null) {
+                reply.status(404);
+                return MESSAGES.noUniversityForID;
+            }
+
+            university = await university.update({
+                name: request.body.name,
+                domain: request.body.domain,
+            });
 
             return {
                 ok: true,
-                result: university,
+                result: new UniversityResult(university),
             };
         },
     });
@@ -140,18 +184,15 @@ async function routes(fastify: FastifyInstance, options) {
         method: 'DELETE',
         url: '/:universityID',
         handler: async (request, reply): Promise<Reply> => {
-            const dbUniversity = await fastify.db.models.University.findByPk(
+            const university = await fastify.db.models.University.findByPk(
                 request.params.universityID,
             );
-            if (dbUniversity === null) {
+            if (university === null) {
                 reply.status(404);
-                return {
-                    ok: false,
-                    reason: 'No university exists with that ID.',
-                };
+                return MESSAGES.noUniversityForID;
             }
 
-            dbUniversity.destroy();
+            await university.destroy();
 
             return {
                 ok: true,
