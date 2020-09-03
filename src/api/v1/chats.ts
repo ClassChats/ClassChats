@@ -1,5 +1,5 @@
-import { FastifyInstance, GoodReply, Reply, BadReply } from './types';
-import { Op, Model } from 'sequelize';
+import { FastifyInstance, Reply, BadReply } from './types';
+import { Model, Sequelize } from 'sequelize';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { ServerResponse } from 'http';
 
@@ -7,6 +7,8 @@ import { ServerResponse } from 'http';
 class ChatResult {
     id: number;
     link: string;
+    platform: string;
+    classID: number | null;
 
     /**
      * Creates a `ChatResult` from a Chat `Model`.
@@ -14,6 +16,8 @@ class ChatResult {
     constructor(Chat: Model) {
         this.id = Chat.id;
         this.link = Chat.link;
+        this.platform = Chat.platform.name;
+        this.classID = Chat.class.id;
     }
 }
 
@@ -24,14 +28,11 @@ const SCHEMAS = {
             link: {
                 type: 'string',
             },
-            courseID: {
+            classID: {
                 type: 'integer',
             },
-            sectionID: {
-                type: 'integer'
-            }
         },
-        required: ['link', 'courseID'],
+        required: ['link', 'classID'],
     },
     querystring: {
         link: {
@@ -47,19 +48,11 @@ const MESSAGES: { [key: string]: Reply } = {
     noChatForID: {
         ok: false,
         reason: 'No chat exists with that ID',
-    }
-    regexFail: {
-        ok: false,
-        reason: 'Could not validate link',
     },
-    noSuchCourse: {
+    noSuchClass: {
         ok: false,
-        reason: 'Could not attach the link to a course'
+        reason: 'No class exists with that ID',
     },
-    noSuchSection: {
-        ok: false,
-        reason: 'Could not attach the link to a section'
-    }
 };
 
 // Helper functions
@@ -71,17 +64,40 @@ async function validateBody(
     request: FastifyRequest,
     reply: FastifyReply<ServerResponse>,
 ): Promise<BadReply | undefined> {
-    if (!(request.body.link && request.body.courseID)) {
+    if (!(request.body.link && request.body.classID)) {
         reply.status(400);
         return {
             ok: false,
-            reason: "Missing required property 'link' or 'courseID'",
+            reason: "Missing required property 'link' or 'classID'",
         };
     }
 }
 
+/**
+ * Determine which platform a link belongs to, and return `null` if it belongs to none of them.
+ * TODO Include a section in the admin panel that lists chats with unkown links.
+ */
+async function determinePlatform(
+    db: Sequelize,
+    link: string,
+): Promise<Model | null> {
+    const platforms = await db.models.Platform.findAll();
+
+    for (const platform of platforms) {
+        const regex = new RegExp(platform.regex);
+
+        // If the link matches the platform's regular expression, return the platform
+        if (regex.test(link)) {
+            return platform;
+        }
+    }
+
+    return null;
+}
+
 // Routes
 async function routes(fastify: FastifyInstance, options) {
+    // TODO add a general GET / route
 
     // Get a chat by its ID and return it as a `ChatResult` object.
     fastify.route({
@@ -111,11 +127,24 @@ async function routes(fastify: FastifyInstance, options) {
             body: SCHEMAS.body,
         },
         preValidation: validateBody,
-        handler: async (request, reply): Promise<GoodReply> => {
+        handler: async (request, reply): Promise<Reply> => {
+            // Try to get the given class
+            const theClass = await fastify.db.models.Class.findByPk(
+                request.params.classID,
+            );
+            if (theClass == null) {
+                reply.status(400);
+                return MESSAGES.noSuchClass;
+            }
+
+            // Determine the platform
+            const platform = determinePlatform(fastify.db, request.params.link);
+
+            // Create the chat
             const chat = await fastify.db.models.Chat.create({
                 link: request.body.link,
-                courseID: request.body.courseID,
-                sectionID: request.body.sectionID,
+                class: theClass,
+                platform: platform,
             });
 
             reply.status(201);
@@ -143,8 +172,23 @@ async function routes(fastify: FastifyInstance, options) {
                 return MESSAGES.noChatForID;
             }
 
+            // Try to get the given class
+            const theClass = await fastify.db.models.Class.findByPk(
+                request.params.classID,
+            );
+            if (theClass == null) {
+                reply.status(400);
+                return MESSAGES.noSuchClass;
+            }
+
+            // Determine the platform
+            const platform = determinePlatform(fastify.db, request.params.link);
+
+            // Update the chat
             chat = await chat.update({
                 link: request.body.link,
+                class: theClass,
+                platform: platform,
             });
 
             return {
