@@ -1,7 +1,9 @@
-import { FastifyInstance, GoodReply, Reply, BadReply } from './types';
-import { Op, Model } from 'sequelize';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { Op } from 'sequelize';
 import { ServerResponse } from 'http';
+
+import type { FastifyInstance, GoodReply, Reply, BadReply } from './types';
+import type { Model } from 'sequelize';
+import type { FastifyRequest, FastifyReply } from 'fastify';
 
 // Types
 class UniversityResult {
@@ -45,7 +47,7 @@ const SCHEMAS = {
 const MESSAGES: { [key: string]: Reply } = {
     noUniversityForID: {
         ok: false,
-        reason: 'No university exists with that ID.',
+        reason: 'No university exists with that ID',
     },
 };
 
