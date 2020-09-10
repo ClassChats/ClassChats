@@ -1,16 +1,12 @@
 import Fastify from 'fastify';
 
+// Routes
+import api from './api/v1/api';
+
 // The server instance
 const fastify = Fastify({ logger: true });
 
-// Register routes
-const routes = {
-    api: {
-        v1: require('./api/v1/api'),
-    },
-};
-
-fastify.register(routes.api.v1, {
+fastify.register(api, {
     prefix: '/api/v1',
 });
 
