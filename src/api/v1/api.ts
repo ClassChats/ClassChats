@@ -1,18 +1,20 @@
-import Fastify = require('fastify');
-import sequelize = require('../../db/setup');
+import sequelize from '../../db/setup';
 
-async function routes(fastify: Fastify.FastifyInstance, options) {
+// Types
+import type { FastifyInstance } from 'fastify';
+
+// Routes
+import universities from './universities';
+
+export default async function api(
+    fastify: FastifyInstance,
+    options,
+): Promise<void> {
     // Add a Sequelize instance to our Fastify instance
     fastify.decorate('db', sequelize);
 
     // Register routes
-    const routes = {
-        universities: require('./universities'),
-    };
-
-    fastify.register(routes.universities, {
+    fastify.register(universities, {
         prefix: '/universities',
     });
 }
-
-export = routes;
