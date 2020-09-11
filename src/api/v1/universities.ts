@@ -1,9 +1,15 @@
 import { Op } from 'sequelize';
 import { ServerResponse } from 'http';
 
-import type { FastifyInstance, GoodReply, Reply, BadReply } from './types';
-import type { Model } from 'sequelize';
+import type { FastifyInstance } from './types';
+import type {
+    GoodResponse,
+    BadResponse,
+    CollectionResponse,
+    ResourceResponse,
+} from './types/responses';
 import type { FastifyRequest, FastifyReply } from 'fastify';
+import { ResponseGroup } from './types/routes';
 
 // Types
 class UniversityResult {
@@ -44,10 +50,14 @@ const SCHEMAS = {
     },
 };
 
-const MESSAGES: { [key: string]: Reply } = {
-    noUniversityForID: {
-        ok: false,
-        reason: 'No university exists with that ID',
+// Responses that are reused throughout the file
+const RESPONSES: ResponseGroup = {
+    good: {},
+    bad: {
+        noUniversityForID: {
+            ok: false,
+            reason: 'No university exists with that ID',
+        },
     },
 };
 
@@ -59,7 +69,7 @@ const MESSAGES: { [key: string]: Reply } = {
 async function validateBody(
     request: FastifyRequest,
     reply: FastifyReply<ServerResponse>,
-): Promise<BadReply | undefined> {
+): Promise<BadResponse | void> {
     if (!(request.body.name && request.body.domain)) {
         reply.status(400);
         return {
@@ -81,7 +91,10 @@ function splitNonempty(str: string, delim: string, limit?: number) {
 }
 
 // Routes
-export default async function routes(fastify: FastifyInstance, options) {
+export default async function routes(
+    fastify: FastifyInstance,
+    options,
+): Promise<void> {
     // Get universities and return them as an array of `UniversityResult` objects.
     fastify.route({
         method: 'GET',
@@ -89,7 +102,10 @@ export default async function routes(fastify: FastifyInstance, options) {
         schema: {
             querystring: SCHEMAS.querystring,
         },
-        handler: async (request, reply): Promise<GoodReply> => {
+        handler: async (
+            request,
+            reply,
+        ): Promise<CollectionResponse<UniversityResult>> => {
             // Process the query string
             const where: {
                 [key: string]: { [key: string]: Array<string> };
@@ -137,7 +153,10 @@ export default async function routes(fastify: FastifyInstance, options) {
             body: SCHEMAS.body,
         },
         preValidation: validateBody,
-        handler: async (request, reply): Promise<GoodReply> => {
+        handler: async (
+            request,
+            reply,
+        ): Promise<ResourceResponse<UniversityResult>> => {
             const university = await fastify.db.models.University.create({
                 name: request.body.name,
                 domain: request.body.domain,
@@ -158,13 +177,18 @@ export default async function routes(fastify: FastifyInstance, options) {
             fastify.route({
                 method: 'GET',
                 url: '/',
-                handler: async (request, reply): Promise<Reply> => {
+                handler: async (
+                    request,
+                    reply,
+                ): Promise<
+                    BadResponse | ResourceResponse<UniversityResult>
+                > => {
                     const university = await fastify.db.models.University.findByPk(
                         request.params.universityID,
                     );
                     if (university === null) {
                         reply.status(404);
-                        return MESSAGES.noUniversityForID;
+                        return RESPONSES.bad.noUniversityForID;
                     }
 
                     return {
@@ -182,13 +206,18 @@ export default async function routes(fastify: FastifyInstance, options) {
                     body: SCHEMAS.body,
                 },
                 preValidation: validateBody,
-                handler: async (request, reply): Promise<Reply> => {
+                handler: async (
+                    request,
+                    reply,
+                ): Promise<
+                    BadResponse | ResourceResponse<UniversityResult>
+                > => {
                     let university = await fastify.db.models.University.findByPk(
                         request.params.universityID,
                     );
                     if (university === null) {
                         reply.status(404);
-                        return MESSAGES.noUniversityForID;
+                        return RESPONSES.bad.noUniversityForID;
                     }
 
                     university = await university.update({
@@ -207,13 +236,16 @@ export default async function routes(fastify: FastifyInstance, options) {
             fastify.route({
                 method: 'DELETE',
                 url: '/',
-                handler: async (request, reply): Promise<Reply> => {
+                handler: async (
+                    request,
+                    reply,
+                ): Promise<BadResponse | GoodResponse> => {
                     const university = await fastify.db.models.University.findByPk(
                         request.params.universityID,
                     );
                     if (university === null) {
                         reply.status(404);
-                        return MESSAGES.noUniversityForID;
+                        return RESPONSES.bad.noUniversityForID;
                     }
 
                     await university.destroy();
