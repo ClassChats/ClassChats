@@ -91,10 +91,7 @@ function splitNonempty(str: string, delim: string, limit?: number) {
 }
 
 // Routes
-export default async function routes(
-    fastify: FastifyInstance,
-    options,
-): Promise<void> {
+export default async function routes(fastify: FastifyInstance, options): Promise<void> {
     // Get universities and return them as an array of `UniversityResult` objects.
     fastify.route({
         method: 'GET',
@@ -102,10 +99,7 @@ export default async function routes(
         schema: {
             querystring: SCHEMAS.querystring,
         },
-        handler: async (
-            request,
-            reply,
-        ): Promise<CollectionResponse<UniversityResult>> => {
+        handler: async (request, reply): Promise<CollectionResponse<UniversityResult>> => {
             // Process the query string
             const where: {
                 [key: string]: { [key: string]: Array<string> };
@@ -153,10 +147,7 @@ export default async function routes(
             body: SCHEMAS.body,
         },
         preValidation: validateBody,
-        handler: async (
-            request,
-            reply,
-        ): Promise<ResourceResponse<UniversityResult>> => {
+        handler: async (request, reply): Promise<ResourceResponse<UniversityResult>> => {
             const university = await fastify.db.models.University.create({
                 name: request.body.name,
                 domain: request.body.domain,
@@ -180,9 +171,7 @@ export default async function routes(
                 handler: async (
                     request,
                     reply,
-                ): Promise<
-                    BadResponse | ResourceResponse<UniversityResult>
-                > => {
+                ): Promise<BadResponse | ResourceResponse<UniversityResult>> => {
                     const university = await fastify.db.models.University.findByPk(
                         request.params.universityID,
                     );
@@ -209,9 +198,7 @@ export default async function routes(
                 handler: async (
                     request,
                     reply,
-                ): Promise<
-                    BadResponse | ResourceResponse<UniversityResult>
-                > => {
+                ): Promise<BadResponse | ResourceResponse<UniversityResult>> => {
                     let university = await fastify.db.models.University.findByPk(
                         request.params.universityID,
                     );
@@ -236,10 +223,7 @@ export default async function routes(
             fastify.route({
                 method: 'DELETE',
                 url: '/',
-                handler: async (
-                    request,
-                    reply,
-                ): Promise<BadResponse | GoodResponse> => {
+                handler: async (request, reply): Promise<BadResponse | GoodResponse> => {
                     const university = await fastify.db.models.University.findByPk(
                         request.params.universityID,
                     );
