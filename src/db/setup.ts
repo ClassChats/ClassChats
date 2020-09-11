@@ -3,11 +3,7 @@ import Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 // Check the environment variables
-if (
-    !process.env.DB_DATABASE ||
-    !process.env.DB_USERNAME ||
-    !process.env.DB_PASSWORD
-) {
+if (!process.env.DB_DATABASE || !process.env.DB_USERNAME || !process.env.DB_PASSWORD) {
     console.error(
         'You must supply values for DB_DATABASE, DB_USERNAME, and DB_PASSWORD as environment variables.',
     );

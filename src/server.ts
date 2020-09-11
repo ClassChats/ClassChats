@@ -1,17 +1,12 @@
-import Fastify = require('fastify');
-import { AddressInfo } from 'net';
+import Fastify from 'fastify';
+
+// Routes
+import api from './api/v1/api';
 
 // The server instance
 const fastify = Fastify({ logger: true });
 
-// Register routes
-const routes = {
-    api: {
-        v1: require('./api/v1/api'),
-    },
-};
-
-fastify.register(routes.api.v1, {
+fastify.register(api, {
     prefix: '/api/v1',
 });
 
@@ -24,11 +19,14 @@ fastify.addHook('onRequest', async (request, reply) => {
     }
 });
 
-// Start the server
-fastify.listen(3000, '0.0.0.0', function(err, address) {
-    if (err) {
+// Start the server and export the promise
+export = fastify
+    .listen(3000, '0.0.0.0')
+    .then((address) => {
+        fastify.log.info(`Server listening at ${address}`);
+        return address;
+    })
+    .catch((err) => {
         fastify.log.error(err);
         process.exit(1);
-    }
-    fastify.log.info(`Server listening at ${address}`);
-});
+    });
